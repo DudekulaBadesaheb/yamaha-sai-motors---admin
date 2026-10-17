@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yamaha Sai Motors | Admin Console & Catalog Studio</title>
+  <!-- Bootstrap 5 CSS & Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Rajdhani:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" type="image" href="https://www.citypng.com/public/uploads/preview/yamaha-blue-sign-symbol-logo-icon-png-701751694969805a5m8nkxi2q.png?v=2026100920">
+  <style>
+    :root {
+      --yamaha-navy: #070B14;
+      --yamaha-surface: #0E1626;
+      --yamaha-card: #141F36;
+      --yamaha-blue: #0044EE;
+      --yamaha-cyan: #00F0FF;
+      --yamaha-red: #E60012;
+      --border-glow: rgba(0, 240, 255, 0.25);
+      --border-subtle: rgba(255, 255, 255, 0.08);
+    }
+    body {
+      background-color: var(--yamaha-navy);
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
+      min-height: 100vh;
+    }
+    .font-racing { font-family: 'Rajdhani', sans-serif; text-transform: uppercase; }
+
+    /* Passcode Lock Screen */
+    #lockscreen-overlay {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at center, #101B30 0%, #060910 100%);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .lock-card {
+      background: var(--yamaha-surface);
+      border: 1px solid var(--border-glow);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 420px;
+      padding: 2.5rem;
+      box-shadow: 0 10px 40px rgba(0, 68, 238, 0.35);
+    }
+
+    /* Admin View */
+    .admin-card {
+      background: var(--yamaha-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+    }
+    .table-dark {
+      --bs-table-bg: var(--yamaha-surface);
+      --bs-table-border-color: var(--border-subtle);
+    }
+    .form-control, .form-select {
+      background-color: var(--yamaha-card);
+      border: 1px solid var(--border-subtle);
+      color: #fff;
+    }
+    .form-control:focus, .form-select:focus {
+      background-color: var(--yamaha-card);
+      border-color: var(--yamaha-cyan);
+      color: #fff;
+      box-shadow: 0 0 10px rgba(0, 240, 255, 0.25);
+    }
+    .nav-pills .nav-link {
+      color: #8E9DB5;
+      border: 1px solid var(--border-subtle);
+      margin-right: 6px;
+      margin-bottom: 6px;
+      transition: all 0.2s ease;
+    }
+    .nav-pills .nav-link.active, .nav-pills .nav-link:hover {
+      background: var(--yamaha-blue);
+      border-color: var(--yamaha-cyan);
+      color: #fff;
+      box-shadow: 0 0 12px rgba(0, 240, 255, 0.2);
+    }
+
+    /* Image Gallery Cards */
+    .img-preview-card {
+      position: relative;
+      width: 140px;
+      height: 105px;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--border-subtle);
+      background: #000;
+    }
+    .img-preview-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    .img-del-btn {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      background: rgba(230, 0, 18, 0.85);
+      border: none;
+      color: #fff;
+      border-radius: 4px;
+      padding: 2px 6px;
+      font-size: 0.75rem;
+      cursor: pointer;
+    }
+    .img-del-btn:hover { background: var(--yamaha-red); }
+
+    .color-edit-card {
+      background: var(--yamaha-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. Password Lock Screen (Passcode: 123456789) -->
+  <div id="lockscreen-overlay">
+    <div class="lock-card text-center">
+      <div class="mb-3">
+        <i class="bi bi-shield-lock display-4" style="color:var(--yamaha-cyan);"></i>
+      </div>
+      <h3 class="font-racing fw-bold">Yamaha Sai Motors</h3>
+      <p class="text-secondary small">Authorized Admin Authentication</p>
+      
+      <form onsubmit="handleAdminLogin(event)">
+        <div class="mb-3 text-start">
+          <label class="form-label small text-secondary">Security Passcode</label>
+          <input type="password" class="form-control text-center fs-5" id="admin-passcode" placeholder="•••••••••" required>
+        </div>
+        <div id="login-error-msg" class="text-danger small mb-3 d-none">Invalid Passcode! Try again.</div>
+        <button type="submit" class="btn btn-primary w-100 font-racing py-2 fs-5">Unlock Console</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 2. Authenticated Admin Dashboard -->
+  <div class="container-fluid py-4 px-lg-5 d-none" id="admin-main-view">
+    <div class="d-flex flex-wrap justify-content-between align-items-center pb-3 mb-4 border-bottom border-secondary">
+      <div class="d-flex align-items-center gap-3">
+        <img src="https://www.citypng.com/public/uploads/preview/yamaha-blue-sign-symbol-logo-icon-png-701751694969805a5m8nkxi2q.png?v=2026100920" 
+             alt="Yamaha" style="height:38px;"
+             onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/8/8b/Yamaha_Motor_logo.svg'">
+        <div>
+          <h2 class="h3 font-racing fw-bold text-white mb-0">Yamaha Sai Motors <span style="color:var(--yamaha-cyan);">Admin Console</span></h2>
+          <span class="text-secondary small">Model Names, Colors, BS6 Compliance, Specs & Cloud Sync</span>
+        </div>
+      </div>
+      <div class="d-flex gap-2">
+        <button class="btn btn-outline-info font-racing" onclick="saveAndSyncAllToGoogleSheet()">
+          <i class="bi bi-cloud-arrow-up me-1"></i> Sync To Google Sheets
+        </button>
+        <button class="btn btn-danger font-racing" onclick="lockAdminSession()">
+          <i class="bi bi-box-arrow-right me-1"></i> Lock
+        </button>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <ul class="nav nav-pills mb-4" id="adminTab" role="tablist">
+      <li class="nav-item">
+        <button class="nav-link active font-racing" data-bs-toggle="pill" data-bs-target="#tab-models">Models & Trims Pricing</button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link font-racing" data-bs-toggle="pill" data-bs-target="#tab-colors">Colorways & Liveries</button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link font-racing" data-bs-toggle="pill" data-bs-target="#tab-specs">18-Param Specifications & Compliance</button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link font-racing" data-bs-toggle="pill" data-bs-target="#tab-images">Multi-Image Studio</button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link font-racing" data-bs-toggle="pill" data-bs-target="#tab-accessories">Model Extrafiting</button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link font-racing" data-bs-toggle="pill" data-bs-target="#tab-insurance">Model Insurance</button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link font-racing" data-bs-toggle="pill" data-bs-target="#tab-add">Add New Model</button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link font-racing" data-bs-toggle="pill" data-bs-target="#tab-settings">Apps Script API</button>
+      </li>
+    </ul>
+
+    <div class="tab-content" id="adminTabContent">
+      
+      <!-- TAB 1: Models Name Modification & Trims Pricing -->
+      <div class="tab-pane fade show active" id="tab-models">
+        <div class="admin-card p-4">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div>
+              <h4 class="font-racing text-cyan mb-0" style="color:var(--yamaha-cyan);">Model Catalog, Name Modification & Trims</h4>
+              <span class="small text-secondary">Rename bike models and tune prices for Basic, Middle, and Top trims</span>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="table table-dark table-hover align-middle">
+              <thead>
+                <tr>
+                  <th style="min-width: 180px;">Model Name (Editable)</th>
+                  <th>Compliance Badge</th>
+                  <th>Basic Price (₹)</th>
+                  <th>Middle Price (₹)</th>
+                  <th>Top Price (₹)</th>
+                  <th>Active Offer Tag</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="models-table-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 2: Colorways & Liveries Modification -->
+      <div class="tab-pane fade" id="tab-colors">
+        <div class="admin-card p-4">
+          <div class="row g-3 mb-4 align-items-center">
+            <div class="col-md-6">
+              <h4 class="font-racing text-cyan mb-0" style="color:var(--yamaha-cyan);">Color Schemes & Swatches Modification</h4>
+              <span class="small text-secondary">Rename colors, change swatch hex codes, and manage factory liveries</span>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small text-secondary">Select Model to Edit Colors</label>
+              <select class="form-select" id="color-model-select" onchange="renderColorsManager()"></select>
+            </div>
+          </div>
+
+          <!-- Existing Colors List for Model -->
+          <h5 class="font-racing text-white mb-3">Available Colors for Selected Model</h5>
+          <div class="row g-3 mb-4" id="colors-list-container">
+            <!-- Dynamic color modification items -->
+          </div>
+
+          <!-- Add New Colorway Form -->
+          <div class="p-3 rounded border border-secondary" style="background:var(--yamaha-card);">
+            <h5 class="font-racing" style="color:var(--yamaha-cyan);">Add Brand New Colorway to Selected Model</h5>
+            <form class="row g-2 align-items-center" onsubmit="handleAddColorway(event)">
+              <div class="col-md-5">
+                <input type="text" class="form-control" id="add-color-name" placeholder="Color Name (e.g. Monster Energy Edition)" required>
+              </div>
+              <div class="col-md-3 d-flex align-items-center gap-2">
+                <label class="small text-secondary mb-0">Swatch:</label>
+                <input type="color" class="form-control form-control-color" id="add-color-hex" value="#0050FF" style="width: 50px;">
+              </div>
+              <div class="col-md-4">
+                <button type="submit" class="btn btn-primary w-100 font-racing">
+                  <i class="bi bi-palette me-1"></i> Add Colorway
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 3: 18-Parameter Specifications & Compliance Manager -->
+      <div class="tab-pane fade" id="tab-specs">
+        <div class="admin-card p-4">
+          <div class="row g-3 mb-4 align-items-center">
+            <div class="col-md-6">
+              <h4 class="font-racing text-cyan mb-0" style="color:var(--yamaha-cyan);">Technical Specifications & Compliance Editor</h4>
+              <span class="small text-secondary">Edit BS6 Phase 2B compliance and full engineering specs per model</span>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small text-secondary">Select Model</label>
+              <select class="form-select" id="specs-model-select" onchange="renderModelSpecsEditor()"></select>
+            </div>
+          </div>
+
+          <form id="specs-editor-form" onsubmit="handleSaveModelSpecs(event)" class="row g-3">
+            <!-- Highlighted Emission / Compliance Option -->
+            <div class="col-md-12 p-3 rounded mb-2 border border-info" style="background:rgba(0, 68, 238, 0.15);">
+              <label class="form-label font-racing fw-bold" style="color:var(--yamaha-cyan);">
+                <i class="bi bi-patch-check-fill me-1"></i> Emission Standard / Compliance Badge Label (e.g. BS6 Phase 2B Compliant)
+              </label>
+              <input type="text" class="form-control fs-5" id="spec-edit-emissionStandard" placeholder="e.g. BS6 Phase 2B Compliant" required>
+              <div class="small text-secondary mt-1">This text appears directly on the top badge in user.html.</div>
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label small text-secondary">1. Displacement</label>
+              <input type="text" class="form-control" id="spec-edit-displacement" placeholder="e.g. 155 cc" required>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label small text-secondary">2. Max Power</label>
+              <input type="text" class="form-control" id="spec-edit-maxPower" placeholder="e.g. 18.1 bhp @ 10000 rpm" required>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label small text-secondary">3. Max Torque</label>
+              <input type="text" class="form-control" id="spec-edit-maxTorque" placeholder="e.g. 14.2 Nm @ 7500 rpm" required>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label small text-secondary">4. Top Speed</label>
+              <input type="text" class="form-control" id="spec-edit-topSpeed" placeholder="e.g. 125 kmph" required>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label small text-secondary">5. Mileage - Owner Reported</label>
+              <input type="text" class="form-control" id="spec-edit-mileage" placeholder="e.g. 46 kmpl" required>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label small text-secondary">6. Transmission</label>
+              <input type="text" class="form-control" id="spec-edit-transmission" placeholder="e.g. 6 Speed Manual" required>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label small text-secondary">7. Transmission Type</label>
+              <input type="text" class="form-control" id="spec-edit-transmissionType" placeholder="e.g. Chain Drive" required>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label small text-secondary">8. Gear Shifting Pattern</label>
+              <input type="text" class="form-control" id="spec-edit-gearShiftPattern" placeholder="e.g. 1 Down 5 Up" required>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label small text-secondary">9. Clutch</label>
+              <input type="text" class="form-control" id="spec-edit-clutch" placeholder="e.g. Assist And Slipper Clutch" required>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label small text-secondary">10. Riding Range</label>
+              <input type="text" class="form-control" id="spec-edit-ridingRange" placeholder="e.g. 460 km" required>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label small text-secondary">11. Riding Modes</label>
+              <input type="text" class="form-control" id="spec-edit-ridingModes" placeholder="e.g. Track & Street / No" required>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label small text-secondary">12. Engine Type</label>
+              <input type="text" class="form-control" id="spec-edit-engineType" placeholder="e.g. 1 Cylinder, Liquid Cooled, 4 Valves" required>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label small text-secondary">13. Bore x Stroke</label>
+              <input type="text" class="form-control" id="spec-edit-boreStroke" placeholder="e.g. 58 mm x 58.7 mm" required>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label small text-secondary">14. Compression Ratio</label>
+              <input type="text" class="form-control" id="spec-edit-compressionRatio" placeholder="e.g. 11.6 : 1" required>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label small text-secondary">15. Spark Plugs</label>
+              <input type="text" class="form-control" id="spec-edit-sparkPlugs" placeholder="e.g. 1 Per Cylinder" required>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label small text-secondary">16. Battery</label>
+              <input type="text" class="form-control" id="spec-edit-battery" placeholder="e.g. 12V,4.0Ah(10HR)" required>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label small text-secondary">17. Fuel Type</label>
+              <input type="text" class="form-control" id="spec-edit-fuelType" placeholder="e.g. Petrol" required>
+            </div>
+            <div class="col-12 mt-4">
+              <button type="submit" class="btn btn-primary font-racing px-4 py-2 fs-5">
+                <i class="bi bi-save me-1"></i> Save Specifications for This Model
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- TAB 4: Multi-Image Gallery Manager -->
+      <div class="tab-pane fade" id="tab-images">
+        <div class="admin-card p-4">
+          <div class="row g-3 mb-4 align-items-center">
+            <div class="col-md-6">
+              <label class="form-label small text-secondary">Select Model</label>
+              <select class="form-select" id="img-model-select" onchange="renderModelImageManager()"></select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small text-secondary">Select Colorway</label>
+              <select class="form-select" id="img-color-select" onchange="renderModelImages()"></select>
+            </div>
+          </div>
+
+          <h5 class="font-racing text-white mb-3">Current Photo Showcase for Selected Color</h5>
+          <div class="d-flex flex-wrap gap-3 mb-4 p-3 bg-dark rounded border border-secondary" id="active-images-gallery"></div>
+
+          <div class="p-3 rounded border border-secondary" style="background:var(--yamaha-card);">
+            <h5 class="font-racing" style="color:var(--yamaha-cyan);">Add More Images to This Model Color</h5>
+            <form class="row g-2" onsubmit="handleAddImageToModel(event)">
+              <div class="col-md-9">
+                <input type="url" class="form-control" id="new-image-url-input" placeholder="Paste Direct Image URL (https://...)" required>
+              </div>
+              <div class="col-md-3">
+                <button type="submit" class="btn btn-primary w-100 font-racing">
+                  <i class="bi bi-plus-circle me-1"></i> Add Photo
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 5: Accessories / Extrafiting Manager -->
+      <div class="tab-pane fade" id="tab-accessories">
+        <div class="admin-card p-4">
+          <div class="row mb-3 align-items-center">
+            <div class="col-md-6">
+              <h4 class="font-racing text-cyan mb-0" style="color:var(--yamaha-cyan);">Model Extrafiting Customizer</h4>
+            </div>
+            <div class="col-md-6">
+              <select class="form-select" id="acc-model-select" onchange="renderAccessoriesManager()"></select>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="table table-dark table-hover align-middle">
+              <thead>
+                <tr>
+                  <th>Accessory Name</th>
+                  <th>Price (₹)</th>
+                  <th>Icon Class (Bootstrap)</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="accessories-table-tbody"></tbody>
+            </table>
+          </div>
+          <hr class="border-secondary my-3">
+          <h5 class="font-racing">Add New Accessory to Selected Model</h5>
+          <form class="row g-2" onsubmit="handleAddAccessory(event)">
+            <div class="col-md-4">
+              <input type="text" class="form-control" id="new-acc-name" placeholder="Accessory Name" required>
+            </div>
+            <div class="col-md-3">
+              <input type="number" class="form-control" id="new-acc-price" placeholder="Price (₹)" required>
+            </div>
+            <div class="col-md-3">
+              <input type="text" class="form-control" id="new-acc-icon" placeholder="bi-gear" value="bi-gear">
+            </div>
+            <div class="col-md-2">
+              <button type="submit" class="btn btn-primary w-100 font-racing">Add Item</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- TAB 6: Model Insurance Manager -->
+      <div class="tab-pane fade" id="tab-insurance">
+        <div class="admin-card p-4">
+          <div class="row mb-3 align-items-center">
+            <div class="col-md-6">
+              <h4 class="font-racing text-cyan mb-0" style="color:var(--yamaha-cyan);">Model Insurance Manager</h4>
+            </div>
+            <div class="col-md-6">
+              <select class="form-select" id="ins-model-select" onchange="renderInsuranceManager()"></select>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="table table-dark table-hover align-middle">
+              <thead>
+                <tr>
+                  <th>Insurance Package Name</th>
+                  <th>Premium Price (₹)</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="insurance-table-tbody"></tbody>
+            </table>
+          </div>
+          <hr class="border-secondary my-3">
+          <h5 class="font-racing">Add Insurance Tier to Selected Model</h5>
+          <form class="row g-2" onsubmit="handleAddInsurance(event)">
+            <div class="col-md-6">
+              <input type="text" class="form-control" id="new-ins-name" placeholder="e.g. Return to Invoice Cover" required>
+            </div>
+            <div class="col-md-4">
+              <input type="number" class="form-control" id="new-ins-price" placeholder="Premium (₹)" required>
+            </div>
+            <div class="col-md-2">
+              <button type="submit" class="btn btn-primary w-100 font-racing">Add Cover</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- TAB 7: Add New Model -->
+      <div class="tab-pane fade" id="tab-add">
+        <div class="admin-card p-4">
+          <h4 class="font-racing text-cyan mb-3" style="color:var(--yamaha-cyan);">Add Brand New Motorcycle to Catalog</h4>
+          <form class="row g-3" onsubmit="handleAddNewModel(event)">
+            <div class="col-md-6">
+              <label class="form-label small text-secondary">Model Name</label>
+              <input type="text" class="form-control" id="add-model-name" placeholder="e.g. Yamaha R3" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small text-secondary">Active Offer</label>
+              <input type="text" class="form-control" id="add-model-offer" placeholder="e.g. Cash Discount ₹5,000">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label small text-secondary">Basic Trim Price (₹)</label>
+              <input type="number" class="form-control" id="add-price-basic" required>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label small text-secondary">Middle Trim Price (₹)</label>
+              <input type="number" class="form-control" id="add-price-mid" required>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label small text-secondary">Top Trim Price (₹)</label>
+              <input type="number" class="form-control" id="add-price-top" required>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label small text-secondary">Primary Color Name</label>
+              <input type="text" class="form-control" id="add-color-name" value="Racing Blue">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label small text-secondary">Color Swatch Hex</label>
+              <input type="color" class="form-control form-control-color" id="add-color-hex" value="#0050FF">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label small text-secondary">Compliance Badge</label>
+              <input type="text" class="form-control" id="add-compliance-badge" value="BS6 Phase 2B Compliant">
+            </div>
+            <div class="col-md-12">
+              <label class="form-label small text-secondary">First Image URL</label>
+              <input type="url" class="form-control" id="add-img-url" placeholder="https://..." required>
+            </div>
+            <div class="col-12 mt-4">
+              <button type="submit" class="btn btn-primary font-racing px-4 py-2 fs-5">Add Model To Showroom</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- TAB 8: Apps Script API -->
+      <div class="tab-pane fade" id="tab-settings">
+        <div class="admin-card p-4">
+          <h4 class="font-racing text-cyan mb-3" style="color:var(--yamaha-cyan);">Google Apps Script Web App Deployment</h4>
+          <p class="text-secondary small">
+            Connect your published Google Apps Script Web App URL below. When saved, all model prices, names, colors, compliance badges, and specifications will sync directly to your Google Sheet.
+          </p>
+          <div class="input-group mb-3">
+            <input type="url" class="form-control" id="admin-apps-script-url" placeholder="https://script.google.com/macros/s/AKfycbwe9QZNYr2hgPVs2VvUXKelUDLqmZdq7_tX6njDslxo4sXX7ufSWlyvR4xNq5mU4Onz/exec">
+            <button class="btn btn-primary font-racing" onclick="saveAppsScriptEndpoint()">Save URL</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    const PASSCODE = "123456789";
+    let database = [];
+    let APPS_SCRIPT_URL = localStorage.getItem("yamaha_apps_script_url") || "";
+
+    // 1. Authentication
+    function handleAdminLogin(e) {
+      e.preventDefault();
+      const input = document.getElementById("admin-passcode").value;
+      if (input === PASSCODE) {
+        document.getElementById("lockscreen-overlay").classList.add("d-none");
+        document.getElementById("admin-main-view").classList.remove("d-none");
+        sessionStorage.setItem("sai_motors_auth", "1");
+        initAdminData();
+      } else {
+        document.getElementById("login-error-msg").classList.remove("d-none");
+      }
+    }
+
+    function lockAdminSession() {
+      sessionStorage.removeItem("sai_motors_auth");
+      location.reload();
+    }
+
+    // 2. Data Initialization
+    function initAdminData() {
+      const stored = localStorage.getItem("yamaha_sai_motors_db");
+      if (stored) {
+        try { database = JSON.parse(stored); } catch (e) { console.error(e); }
+      }
+      if (APPS_SCRIPT_URL) {
+        document.getElementById("admin-apps-script-url").value = APPS_SCRIPT_URL;
+      }
+      renderModelsTable();
+      populateAllModelSelectors();
+      renderColorsManager();
+      renderModelSpecsEditor();
+      renderModelImageManager();
+      renderAccessoriesManager();
+      renderInsuranceManager();
+    }
+
+    function saveLocal() {
+      localStorage.setItem("yamaha_sai_motors_db", JSON.stringify(database));
+    }
+
+    function populateAllModelSelectors() {
+      const selects = ["color-model-select", "specs-model-select", "img-model-select", "acc-model-select", "ins-model-select"];
+      selects.forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        const currentVal = el.value;
+        el.innerHTML = "";
+        database.forEach((b, i) => {
+          el.innerHTML += `<option value="${i}">${b.name}</option>`;
+        });
+        if (currentVal && currentVal < database.length) {
+          el.value = currentVal;
+        }
+      });
+    }
+
+    // 3. Models Table Management & Name Modification
+    function renderModelsTable() {
+      const tbody = document.getElementById("models-table-tbody");
+      tbody.innerHTML = "";
+      database.forEach((b, i) => {
+        const compliance = (b.specs && b.specs.emissionStandard) ? b.specs.emissionStandard : "BS6 Phase 2B Compliant";
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>
+            <input type="text" class="form-control form-control-sm fw-bold text-info" value="${b.name}" onchange="updateModelName(${i}, this.value)" title="Click to rename model">
+          </td>
+          <td>
+            <input type="text" class="form-control form-control-sm" value="${compliance}" onchange="updateModelCompliance(${i}, this.value)" title="Emission / Compliance Badge">
+          </td>
+          <td><input type="number" class="form-control form-control-sm" value="${b.prices.basic}" onchange="updateModelPrice(${i}, 'basic', this.value)"></td>
+          <td><input type="number" class="form-control form-control-sm" value="${b.prices.middle}" onchange="updateModelPrice(${i}, 'middle', this.value)"></td>
+          <td><input type="number" class="form-control form-control-sm" value="${b.prices.top}" onchange="updateModelPrice(${i}, 'top', this.value)"></td>
+          <td><input type="text" class="form-control form-control-sm" value="${b.offer || ''}" onchange="updateModelOffer(${i}, this.value)"></td>
+          <td><button class="btn btn-sm btn-danger" onclick="deleteModel(${i})"><i class="bi bi-trash"></i></button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function updateModelName(i, val) {
+      database[i].name = val.trim();
+      saveLocal();
+      populateAllModelSelectors();
+    }
+
+    function updateModelCompliance(i, val) {
+      if (!database[i].specs) database[i].specs = {};
+      database[i].specs.emissionStandard = val.trim();
+      saveLocal();
+      if (Number(document.getElementById("specs-model-select").value) === i) {
+        document.getElementById("spec-edit-emissionStandard").value = val.trim();
+      }
+    }
+
+    function updateModelPrice(i, trim, val) {
+      database[i].prices[trim] = Number(val);
+      saveLocal();
+    }
+
+    function updateModelOffer(i, val) {
+      database[i].offer = val;
+      saveLocal();
+    }
+
+    function deleteModel(i) {
+      if (confirm(`Delete ${database[i].name}?`)) {
+        database.splice(i, 1);
+        saveLocal();
+        renderModelsTable();
+        populateAllModelSelectors();
+        renderColorsManager();
+        renderModelSpecsEditor();
+        renderModelImageManager();
+      }
+    }
+
+    // 4. Colorways & Liveries Manager
+    function renderColorsManager() {
+      const modelIdx = Number(document.getElementById("color-model-select").value) || 0;
+      const bike = database[modelIdx];
+      const container = document.getElementById("colors-list-container");
+      container.innerHTML = "";
+
+      if (!bike || !bike.colors || bike.colors.length === 0) {
+        container.innerHTML = `<div class="col-12 text-secondary small">No color schemes defined for this model yet.</div>`;
+        return;
+      }
+
+      bike.colors.forEach((col, ci) => {
+        const colDiv = document.createElement("div");
+        colDiv.className = "col-md-6";
+        colDiv.innerHTML = `
+          <div class="color-edit-card d-flex align-items-center justify-content-between gap-2">
+            <div class="d-flex align-items-center gap-2 flex-grow-1">
+              <input type="color" class="form-control form-control-color form-control-sm" value="${col.hex || '#0050FF'}" 
+                     onchange="updateColorHex(${modelIdx}, ${ci}, this.value)" style="width: 44px; height: 38px;">
+              <input type="text" class="form-control form-control-sm" value="${col.name}" 
+                     onchange="updateColorName(${modelIdx}, ${ci}, this.value)" placeholder="Color Name">
+            </div>
+            <button class="btn btn-sm btn-outline-danger" onclick="deleteColorway(${modelIdx}, ${ci})" title="Delete Colorway">
+              <i class="bi bi-trash"></i>
+            </button>
+          </div>
+        `;
+        container.appendChild(colDiv);
+      });
+    }
+
+    function updateColorName(mIdx, cIdx, val) {
+      database[mIdx].colors[cIdx].name = val.trim();
+      saveLocal();
+      renderModelImageManager();
+    }
+
+    function updateColorHex(mIdx, cIdx, val) {
+      database[mIdx].colors[cIdx].hex = val;
+      saveLocal();
+    }
+
+    function deleteColorway(mIdx, cIdx) {
+      if (database[mIdx].colors.length <= 1) {
+        alert("Each model must retain at least one colorway!");
+        return;
+      }
+      if (confirm(`Delete ${database[mIdx].colors[cIdx].name}?`)) {
+        database[mIdx].colors.splice(cIdx, 1);
+        saveLocal();
+        renderColorsManager();
+        renderModelImageManager();
+      }
+    }
+
+    function handleAddColorway(e) {
+      e.preventDefault();
+      const modelIdx = Number(document.getElementById("color-model-select").value) || 0;
+      const name = document.getElementById("add-color-name").value.trim();
+      const hex = document.getElementById("add-color-hex").value;
+
+      if (!database[modelIdx].colors) database[modelIdx].colors = [];
+
+      database[modelIdx].colors.push({
+        name: name,
+        hex: hex,
+        images: []
+      });
+
+      saveLocal();
+      renderColorsManager();
+      renderModelImageManager();
+      document.getElementById("add-color-name").value = "";
+    }
+
+    // 5. Specifications Management (18 Parameters & Compliance)
+    function renderModelSpecsEditor() {
+      const modelIdx = Number(document.getElementById("specs-model-select").value) || 0;
+      const bike = database[modelIdx];
+      if (!bike) return;
+
+      if (!bike.specs) bike.specs = {};
+      const s = bike.specs;
+
+      document.getElementById("spec-edit-emissionStandard").value = s.emissionStandard || "BS6 Phase 2B Compliant";
+      document.getElementById("spec-edit-displacement").value = s.displacement || "155 cc";
+      document.getElementById("spec-edit-maxPower").value = s.maxPower || "18.1 bhp @ 10000 rpm";
+      document.getElementById("spec-edit-maxTorque").value = s.maxTorque || "14.2 Nm @ 7500 rpm";
+      document.getElementById("spec-edit-topSpeed").value = s.topSpeed || "125 kmph";
+      document.getElementById("spec-edit-mileage").value = s.mileage || "46 kmpl";
+      document.getElementById("spec-edit-transmission").value = s.transmission || "6 Speed Manual";
+      document.getElementById("spec-edit-transmissionType").value = s.transmissionType || "Chain Drive";
+      document.getElementById("spec-edit-gearShiftPattern").value = s.gearShiftPattern || "1 Down 5 Up";
+      document.getElementById("spec-edit-clutch").value = s.clutch || "Assist And Slipper Clutch";
+      document.getElementById("spec-edit-ridingRange").value = s.ridingRange || "460 km";
+      document.getElementById("spec-edit-ridingModes").value = s.ridingModes || "No";
+      document.getElementById("spec-edit-engineType").value = s.engineType || "1 Cylinder, Liquid Cooled, 4 Valves";
+      document.getElementById("spec-edit-boreStroke").value = s.boreStroke || "58 mm x 58.7 mm";
+      document.getElementById("spec-edit-compressionRatio").value = s.compressionRatio || "11.6 : 1";
+      document.getElementById("spec-edit-sparkPlugs").value = s.sparkPlugs || "1 Per Cylinder";
+      document.getElementById("spec-edit-battery").value = s.battery || "12V,4.0Ah(10HR)";
+      document.getElementById("spec-edit-fuelType").value = s.fuelType || "Petrol";
+    }
+
+    function handleSaveModelSpecs(e) {
+      e.preventDefault();
+      const modelIdx = Number(document.getElementById("specs-model-select").value) || 0;
+      const bike = database[modelIdx];
+      if (!bike) return;
+
+      bike.specs = {
+        emissionStandard: document.getElementById("spec-edit-emissionStandard").value.trim(),
+        displacement: document.getElementById("spec-edit-displacement").value.trim(),
+        maxPower: document.getElementById("spec-edit-maxPower").value.trim(),
+        maxTorque: document.getElementById("spec-edit-maxTorque").value.trim(),
+        topSpeed: document.getElementById("spec-edit-topSpeed").value.trim(),
+        mileage: document.getElementById("spec-edit-mileage").value.trim(),
+        transmission: document.getElementById("spec-edit-transmission").value.trim(),
+        transmissionType: document.getElementById("spec-edit-transmissionType").value.trim(),
+        gearShiftPattern: document.getElementById("spec-edit-gearShiftPattern").value.trim(),
+        clutch: document.getElementById("spec-edit-clutch").value.trim(),
+        ridingRange: document.getElementById("spec-edit-ridingRange").value.trim(),
+        ridingModes: document.getElementById("spec-edit-ridingModes").value.trim(),
+        engineType: document.getElementById("spec-edit-engineType").value.trim(),
+        boreStroke: document.getElementById("spec-edit-boreStroke").value.trim(),
+        compressionRatio: document.getElementById("spec-edit-compressionRatio").value.trim(),
+        sparkPlugs: document.getElementById("spec-edit-sparkPlugs").value.trim(),
+        battery: document.getElementById("spec-edit-battery").value.trim(),
+        fuelType: document.getElementById("spec-edit-fuelType").value.trim()
+      };
+
+      saveLocal();
+      renderModelsTable();
+      alert(`Specifications & Compliance updated successfully for ${bike.name}!`);
+    }
+
+    // 6. Multi-Image Studio
+    function renderModelImageManager() {
+      const modelIdx = Number(document.getElementById("img-model-select").value) || 0;
+      const bike = database[modelIdx];
+      const colorSelect = document.getElementById("img-color-select");
+      colorSelect.innerHTML = "";
+      if (!bike || !bike.colors) return;
+
+      bike.colors.forEach((col, ci) => {
+        colorSelect.innerHTML += `<option value="${ci}">${col.name}</option>`;
+      });
+
+      renderModelImages();
+    }
+
+    function renderModelImages() {
+      const modelIdx = Number(document.getElementById("img-model-select").value) || 0;
+      const colorIdx = Number(document.getElementById("img-color-select").value) || 0;
+      const gallery = document.getElementById("active-images-gallery");
+      gallery.innerHTML = "";
+
+      const bike = database[modelIdx];
+      if (!bike || !bike.colors || !bike.colors[colorIdx]) {
+        gallery.innerHTML = `<span class="text-secondary small">No photos available.</span>`;
+        return;
+      }
+
+      const images = bike.colors[colorIdx].images || [];
+      if (images.length === 0) {
+        gallery.innerHTML = `<span class="text-secondary small">No photos available for this colorway yet. Add one below!</span>`;
+        return;
+      }
+
+      images.forEach((url, imgIndex) => {
+        const card = document.createElement("div");
+        card.className = "img-preview-card";
+        card.innerHTML = `
+          <img src="${url}" alt="Preview" onerror="this.src='https://placehold.co/140x105/0E1626/00F0FF?text=Invalid+Image'">
+          <button class="img-del-btn" onclick="deleteModelImage(${modelIdx}, ${colorIdx}, ${imgIndex})" title="Delete image">&times;</button>
+        `;
+        gallery.appendChild(card);
+      });
+    }
+
+    function handleAddImageToModel(e) {
+      e.preventDefault();
+      const modelIdx = Number(document.getElementById("img-model-select").value) || 0;
+      const colorIdx = Number(document.getElementById("img-color-select").value) || 0;
+      const input = document.getElementById("new-image-url-input");
+      const url = input.value.trim();
+
+      if (!url) return;
+
+      if (!database[modelIdx].colors[colorIdx].images) {
+        database[modelIdx].colors[colorIdx].images = [];
+      }
+
+      database[modelIdx].colors[colorIdx].images.push(url);
+      saveLocal();
+      renderModelImages();
+      input.value = "";
+    }
+
+    function deleteModelImage(mIdx, cIdx, imgIdx) {
+      if (confirm("Delete this image from the showroom slideshow?")) {
+        database[mIdx].colors[cIdx].images.splice(imgIdx, 1);
+        saveLocal();
+        renderModelImages();
+      }
+    }
+
+    // 7. Accessories Management
+    function renderAccessoriesManager() {
+      const modelIdx = Number(document.getElementById("acc-model-select").value) || 0;
+      const bike = database[modelIdx];
+      const tbody = document.getElementById("accessories-table-tbody");
+      tbody.innerHTML = "";
+      if (!bike || !bike.accessories) return;
+
+      bike.accessories.forEach((acc, ai) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><input type="text" class="form-control form-control-sm" value="${acc.name}" onchange="updateAcc(${modelIdx}, ${ai}, 'name', this.value)"></td>
+          <td><input type="number" class="form-control form-control-sm" value="${acc.price}" onchange="updateAcc(${modelIdx}, ${ai}, 'price', this.value)"></td>
+          <td><input type="text" class="form-control form-control-sm" value="${acc.icon || 'bi-gear'}" onchange="updateAcc(${modelIdx}, ${ai}, 'icon', this.value)"></td>
+          <td><button class="btn btn-sm btn-danger" onclick="deleteAcc(${modelIdx}, ${ai})"><i class="bi bi-trash"></i></button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function updateAcc(mIdx, aIdx, key, val) {
+      database[mIdx].accessories[aIdx][key] = key === 'price' ? Number(val) : val;
+      saveLocal();
+    }
+
+    function deleteAcc(mIdx, aIdx) {
+      database[mIdx].accessories.splice(aIdx, 1);
+      saveLocal();
+      renderAccessoriesManager();
+    }
+
+    function handleAddAccessory(e) {
+      e.preventDefault();
+      const mIdx = Number(document.getElementById("acc-model-select").value) || 0;
+      if (!database[mIdx].accessories) database[mIdx].accessories = [];
+      database[mIdx].accessories.push({
+        id: "acc-" + Date.now(),
+        name: document.getElementById("new-acc-name").value,
+        price: Number(document.getElementById("new-acc-price").value),
+        icon: document.getElementById("new-acc-icon").value || "bi-gear"
+      });
+      saveLocal();
+      renderAccessoriesManager();
+      e.target.reset();
+    }
+
+    // 8. Insurance Management
+    function renderInsuranceManager() {
+      const modelIdx = Number(document.getElementById("ins-model-select").value) || 0;
+      const bike = database[modelIdx];
+      const tbody = document.getElementById("insurance-table-tbody");
+      tbody.innerHTML = "";
+      if (!bike || !bike.insurance) return;
+
+      bike.insurance.forEach((ins, ii) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><input type="text" class="form-control form-control-sm" value="${ins.name}" onchange="updateIns(${modelIdx}, ${ii}, 'name', this.value)"></td>
+          <td><input type="number" class="form-control form-control-sm" value="${ins.price}" onchange="updateIns(${modelIdx}, ${ii}, 'price', this.value)"></td>
+          <td><button class="btn btn-sm btn-danger" onclick="deleteIns(${modelIdx}, ${ii})"><i class="bi bi-trash"></i></button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function updateIns(mIdx, iIdx, key, val) {
+      database[mIdx].insurance[iIdx][key] = key === 'price' ? Number(val) : val;
+      saveLocal();
+    }
+
+    function deleteIns(mIdx, iIdx) {
+      database[mIdx].insurance.splice(iIdx, 1);
+      saveLocal();
+      renderInsuranceManager();
+    }
+
+    function handleAddInsurance(e) {
+      e.preventDefault();
+      const mIdx = Number(document.getElementById("ins-model-select").value) || 0;
+      if (!database[mIdx].insurance) database[mIdx].insurance = [];
+      database[mIdx].insurance.push({
+        id: "ins-" + Date.now(),
+        name: document.getElementById("new-ins-name").value,
+        price: Number(document.getElementById("new-ins-price").value)
+      });
+      saveLocal();
+      renderInsuranceManager();
+      e.target.reset();
+    }
+
+    // 9. Add Brand New Model
+    function handleAddNewModel(e) {
+      e.preventDefault();
+      const newBike = {
+        id: "model-" + Date.now(),
+        name: document.getElementById("add-model-name").value.trim(),
+        offer: document.getElementById("add-model-offer").value.trim(),
+        prices: {
+          basic: Number(document.getElementById("add-price-basic").value),
+          middle: Number(document.getElementById("add-price-mid").value),
+          top: Number(document.getElementById("add-price-top").value)
+        },
+        specs: {
+          emissionStandard: document.getElementById("add-compliance-badge").value.trim() || "BS6 Phase 2B Compliant",
+          displacement: "155 cc",
+          maxPower: "18.1 bhp @ 10000 rpm",
+          maxTorque: "14.2 Nm @ 7500 rpm",
+          topSpeed: "125 kmph",
+          mileage: "46 kmpl",
+          transmission: "6 Speed Manual",
+          transmissionType: "Chain Drive",
+          gearShiftPattern: "1 Down 5 Up",
+          clutch: "Assist And Slipper Clutch",
+          ridingRange: "460 km",
+          ridingModes: "No",
+          engineType: "1 Cylinder, Liquid Cooled, 4 Valves",
+          boreStroke: "58 mm x 58.7 mm",
+          compressionRatio: "11.6 : 1",
+          sparkPlugs: "1 Per Cylinder",
+          battery: "12V,4.0Ah(10HR)",
+          fuelType: "Petrol"
+        },
+        colors: [
+          {
+            name: document.getElementById("add-color-name").value.trim() || "Racing Blue",
+            hex: document.getElementById("add-color-hex").value,
+            images: [document.getElementById("add-img-url").value.trim()]
+          }
+        ],
+        accessories: [],
+        insurance: []
+      };
+      database.push(newBike);
+      saveLocal();
+      alert(`Model ${newBike.name} added successfully!`);
+      location.reload();
+    }
+
+    // 10. Google Sheets Cloud Sync
+    function saveAppsScriptEndpoint() {
+      const url = document.getElementById("admin-apps-script-url").value.trim();
+      localStorage.setItem("yamaha_apps_script_url", url);
+      APPS_SCRIPT_URL = url;
+      alert("Google Apps Script Web App URL updated!");
+    }
+
+    async function saveAndSyncAllToGoogleSheet() {
+      if (!APPS_SCRIPT_URL) {
+        alert("Please configure your Google Apps Script Web App URL under the 'Apps Script API' tab first.");
+        return;
+      }
+      try {
+        await fetch(APPS_SCRIPT_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            action: "sync_full_database",
+            database: database
+          })
+        });
+        alert("Success! Catalog, model names, colorways, compliance badges, specifications, accessories, and insurance synced to Google Sheets.");
+      } catch (err) {
+        alert("Sync error. Please check your Web App URL and deployment access.");
+      }
+    }
+  </script>
+</body>
+</html>
