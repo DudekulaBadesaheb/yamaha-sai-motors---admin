@@ -14,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,700&display=swap" rel="stylesheet">
-
+<link rel="icon" type="image/x-icon" href="https://www.citypng.com/public/uploads/preview/yamaha-white-sign-symbol-logo-icon-png-701751694969799modrhvqgjt.png?v=2026100920">
   <style>
     :root {
       --yamaha-navy: #050811;
@@ -161,7 +161,7 @@
     <header class="admin-header py-2 px-3 px-lg-4">
       <div class="container-fluid d-flex justify-content-between align-items-center">
         <div class="d-flex align-items-center gap-2">
-          <img src="https://images.seeklogo.com/logo-png/15/2/yamaha-logo-png_seeklogo-154896.png" alt="Yamaha" class="brand-logo" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/8/8b/Yamaha_Motor_logo.svg'">
+          <img src="https://www.citypng.com/public/uploads/preview/yamaha-white-sign-symbol-logo-icon-png-701751694969799modrhvqgjt.png?v=2026100920" alt="Yamaha" class="brand-logo" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/8/8b/Yamaha_Motor_logo.svg'">
           <h1 class="h5 mb-0 font-racing text-white fw-bold">Yamaha <span style="color:var(--yamaha-cyan);">Sai Motors Admin</span></h1>
         </div>
         <div class="d-flex gap-2">
@@ -211,7 +211,7 @@
                 <h4 class="font-racing text-cyan mb-1" style="color:var(--yamaha-cyan);">
                   <i class="bi bi-camera-reels me-2"></i>Per-Model 360° & Video Studio
                 </h4>
-                <span class="small text-secondary">Configure the interactive 360 viewer (BikeDekho link or 40-frame sequence) and walkaround video.</span>
+                <span class="small text-secondary">Set the 360 viewer sequence or web link, and full YouTube walkaround embed code for each bike.</span>
               </div>
               <div class="col-12 col-md-6">
                 <label class="form-label small text-secondary fw-bold mb-1">Select Bike Model:</label>
@@ -221,10 +221,10 @@
 
             <div class="row g-3">
               <div class="col-12 col-lg-6">
-                <!-- Unified 360 Input -->
+                <!-- 360 Input -->
                 <div class="p-3 rounded border border-secondary mb-3" style="background:var(--yamaha-card);">
                   <h6 class="font-racing text-info mb-1"><i class="bi bi-arrow-repeat me-1"></i> 360° View Link</h6>
-                  <p class="small text-secondary mb-2">Paste 360 image link (e.g. <code>https://yamaha-r2.yamaha-motor-india.com/assets/images/360/grey/1.webp</code>) or direct 360 web link:</p>
+                  <p class="small text-secondary mb-2">Paste frame link (e.g. <code>https://yamaha-r2.yamaha-motor-india.com/assets/images/360/grey/1.webp</code>) or direct 360 web link:</p>
                   <div class="input-group mb-2">
                     <input type="text" class="form-control" id="model-360-unified-input" placeholder="Paste 360 image or web link here...">
                     <button class="btn btn-outline-info font-racing" type="button" onclick="previewUnified360()">Preview 360</button>
@@ -234,7 +234,7 @@
                 <!-- Video URL Configuration -->
                 <div class="p-3 rounded border border-secondary mb-3" style="background:var(--yamaha-card);">
                   <h6 class="font-racing text-danger mb-1"><i class="bi bi-play-circle me-1"></i> Walkaround Video URL or Embed Code</h6>
-                  <p class="small text-secondary mb-2">Paste YouTube URL, direct MP4 link, or full <code>&lt;iframe&gt;</code> embed code:</p>
+                  <p class="small text-secondary mb-2">Paste YouTube URL, direct MP4 link, or complete <code>&lt;iframe&gt;</code> embed code:</p>
                   <div class="input-group mb-2">
                     <textarea class="form-control" id="model-video-url-input" rows="2" placeholder="https://www.youtube.com/watch?v=... or <iframe ...></iframe>"></textarea>
                     <button class="btn btn-outline-danger font-racing" type="button" onclick="previewCurrentVideoInput()">Preview Video</button>
@@ -264,7 +264,7 @@
             <h4 class="font-racing text-warning mb-2">
               <i class="bi bi-house-play-fill me-2"></i>Home Page Video Manager
             </h4>
-            <p class="small text-secondary mb-3">Update the featured walkaround video playing on the landing page (<code>home.html</code>).</p>
+            <p class="small text-secondary mb-3">Update the featured video playing on the landing page (<code>home.html</code>).</p>
             
             <form onsubmit="handleSaveHomeVideo(event)" class="row g-3">
               <div class="col-12 col-md-6">
@@ -294,7 +294,7 @@
             <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
               <div>
                 <h4 class="font-racing text-cyan mb-0" style="color:var(--yamaha-cyan);">Customer Leads & Inquiries</h4>
-                <span class="small text-secondary">All inquiries submitted via <code>user.html</code></span>
+                <span class="small text-secondary">Live customer bookings submitted from <code>user.html</code></span>
               </div>
               <div class="d-flex gap-2">
                 <input type="text" class="form-control form-control-sm" id="leads-search-input" placeholder="Search by name, phone..." oninput="filterCustomerLeads(this.value)">
@@ -497,6 +497,65 @@
 
   <script>
     const PASSCODE = "123456789";
+
+    // Embedded Catalog Fallback for GitHub Pages domain isolation
+    const DEFAULT_CATALOG = [
+      {
+        id: "xsr-155",
+        name: "XSR 155",
+        subtitle: "BORN TO BE LEGEND",
+        bluetooth: true,
+        offer: "Zero Down Payment",
+        videoUrl: "https://www.youtube.com/watch?v=OTOBP7kAiuA",
+        view360Base: "https://yamaha-r2.yamaha-motor-india.com/assets/images/360/grey/1.webp",
+        view360Url: "",
+        prices: { basic: 159000, middle: 164000, top: 169000 },
+        specs: { emissionStandard: "BS6 Phase 2B Compliant", displacement: "155 cc", maxPower: "19.0 bhp", maxTorque: "14.7 Nm", topSpeed: "120 kmph", mileage: "48 kmpl", transmission: "6 Speed", transmissionType: "Chain", gearShiftPattern: "1 Down 5 Up", clutch: "Assist & Slipper", ridingRange: "480 km", ridingModes: "No", engineType: "Liquid Cooled VVA", boreStroke: "58 x 58.7 mm", compressionRatio: "11.6 : 1", sparkPlugs: "1", battery: "12V 4.0Ah", fuelType: "Petrol" },
+        colors: [
+          { name: "Heritage Blue", hex: "#0050FF", images: ["https://images.unsplash.com/photo-1558981403-c5f9899a28bc?auto=format&fit=crop&w=600&q=80"] },
+          { name: "Heritage Silver", hex: "#A8A9AD", images: ["https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?auto=format&fit=crop&w=600&q=80"] }
+        ],
+        accessories: [{ id: "acc-visor", name: "Retro Visor", price: 1400, icon: "bi-wind" }],
+        insurance: [{ id: "ins-1yr", name: "Standard 1+4 Coverage", price: 7400 }]
+      },
+      {
+        id: "fz-s-hybrid",
+        name: "YAMAHA FZ-S HYBRID",
+        subtitle: "RACE TO THE NEXT LEVEL",
+        bluetooth: true,
+        offer: "₹5,000 Exchange Bonus",
+        videoUrl: "https://www.youtube.com/watch?v=OTOBP7kAiuA",
+        view360Base: "https://yamaha-r2.yamaha-motor-india.com/assets/images/360/grey/1.webp",
+        view360Url: "",
+        prices: { basic: 129000, middle: 132000, top: 135000 },
+        specs: { emissionStandard: "BS6 Phase 2B Compliant", displacement: "149 cc", maxPower: "12.2 bhp @ 7250 rpm", maxTorque: "13.3 Nm", topSpeed: "115 kmph", mileage: "46 kmpl", transmission: "5 Speed Manual", transmissionType: "Chain Drive", gearShiftPattern: "1 Down 4 Up", clutch: "Multi-Plate", ridingRange: "550 km", ridingModes: "TCS", engineType: "Air Cooled Fi TCS", boreStroke: "57.3 x 57.9 mm", compressionRatio: "9.6 : 1", sparkPlugs: "1", battery: "12V 4.0Ah", fuelType: "Petrol" },
+        colors: [
+          { name: "Metallic White", hex: "#EAEAEA", images: ["https://images.unsplash.com/photo-1609630875171-b1321377ee65?auto=format&fit=crop&w=600&q=80"] },
+          { name: "Racing Blue", hex: "#0050FF", images: ["https://images.unsplash.com/photo-1558981403-c5f9899a28bc?auto=format&fit=crop&w=600&q=80"] }
+        ],
+        accessories: [{ id: "acc-guard", name: "Crash Guard", price: 1200, icon: "bi-shield" }],
+        insurance: [{ id: "ins-1yr", name: "Standard 1+4 Coverage", price: 6200 }]
+      },
+      {
+        id: "r15-v4",
+        name: "R15 V4",
+        subtitle: "RACE TO THE NEXT LEVEL",
+        bluetooth: true,
+        offer: "₹5,000 Exchange Bonus",
+        videoUrl: "https://www.youtube.com/watch?v=OTOBP7kAiuA",
+        view360Base: "https://yamaha-r2.yamaha-motor-india.com/assets/images/360/grey/1.webp",
+        view360Url: "",
+        prices: { basic: 182500, middle: 187500, top: 197500 },
+        specs: { emissionStandard: "BS6 Phase 2B Compliant", displacement: "155 cc", maxPower: "18.1 bhp @ 10000 rpm", maxTorque: "14.2 Nm", topSpeed: "125 kmph", mileage: "46 kmpl", transmission: "6 Speed Manual", transmissionType: "Chain Drive", gearShiftPattern: "1 Down 5 Up", clutch: "Assist & Slipper", ridingRange: "460 km", ridingModes: "Track & Street", engineType: "1 Cylinder LC4V VVA", boreStroke: "58 mm x 58.7 mm", compressionRatio: "11.6 : 1", sparkPlugs: "1", battery: "12V 4.0Ah", fuelType: "Petrol" },
+        colors: [
+          { name: "Racing Blue", hex: "#0050FF", images: ["https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?auto=format&fit=crop&w=600&q=80"] },
+          { name: "Dark Knight", hex: "#1C1F26", images: ["https://images.unsplash.com/photo-1609630875171-b1321377ee65?auto=format&fit=crop&w=600&q=80"] }
+        ],
+        accessories: [{ id: "acc-guard", name: "Engine Crash Guard", price: 2450, icon: "bi-shield" }],
+        insurance: [{ id: "ins-1yr", name: "Zero Dep Pack", price: 11400 }]
+      }
+    ];
+
     let database = [];
     let customerLeads = [];
     let APPS_SCRIPT_URL = localStorage.getItem("yamaha_apps_script_url") || "";
@@ -514,12 +573,16 @@
 
     function lockAdminSession() { location.reload(); }
 
-    function initAdminData() {
+    async function initAdminData() {
       const stored = localStorage.getItem("yamaha_sai_motors_db");
       if (stored) {
-        try { database = JSON.parse(stored); } catch (e) { console.error(e); }
+        try { database = JSON.parse(stored); } catch (e) { database = DEFAULT_CATALOG; }
+      } else {
+        database = DEFAULT_CATALOG;
+        localStorage.setItem("yamaha_sai_motors_db", JSON.stringify(database));
       }
-      if (APPS_SCRIPT_URL) {
+
+      if (APPS_SCRIPT_URL && document.getElementById("admin-apps-script-url")) {
         document.getElementById("admin-apps-script-url").value = APPS_SCRIPT_URL;
       }
 
@@ -531,11 +594,6 @@
 
       loadLocalCustomerLeads();
       renderCustomerLeadsTable(customerLeads);
-
-      if (APPS_SCRIPT_URL) {
-        fetchLiveLeadsFromSheet();
-      }
-
       populateAllModelSelectors();
       renderModelMediaSettings();
       renderModelsTable();
@@ -544,6 +602,10 @@
       renderModelImageManager();
       renderAccessoriesManager();
       renderInsuranceManager();
+
+      if (APPS_SCRIPT_URL) {
+        await fetchLiveLeadsFromSheet();
+      }
     }
 
     function saveLocal() {
@@ -582,7 +644,7 @@
     }
 
     // =========================================================================
-    // 2. PER-MODEL 360 & VIDEO STUDIO
+    // 2. PER-MODEL 360 & VIDEO STUDIO (UNIVERSAL INPUT)
     // =========================================================================
     function populateAllModelSelectors() {
       const selects = ["video-model-select", "color-model-select", "specs-model-select", "img-model-select", "acc-model-select", "ins-model-select"];
@@ -602,7 +664,6 @@
       if (!bike) return;
 
       document.getElementById("media-preview-model-name").innerText = bike.name;
-      
       const current360Val = bike.view360Url || bike.view360Base || "https://yamaha-r2.yamaha-motor-india.com/assets/images/360/grey/1.webp";
       document.getElementById("model-360-unified-input").value = current360Val;
       document.getElementById("model-video-url-input").value = bike.videoUrl || "";
@@ -667,7 +728,6 @@
       if (!bike) return;
 
       const unified360 = document.getElementById("model-360-unified-input").value.trim();
-      
       if (unified360.includes(".html") || unified360.includes("bikedekho")) {
         bike.view360Url = unified360;
         bike.view360Base = "";
@@ -684,7 +744,9 @@
       alert(`360° URL and Video settings saved successfully for ${bike.name}!`);
     }
 
-    // Customer Leads
+    // =========================================================================
+    // 3. CUSTOMER LEADS DASHBOARD
+    // =========================================================================
     function loadLocalCustomerLeads() {
       const stored = localStorage.getItem("yamaha_customer_leads");
       if (stored) {
@@ -698,28 +760,30 @@
 
     function renderCustomerLeadsTable(leadsToRender) {
       const tbody = document.getElementById("customer-leads-tbody");
+      if (!tbody) return;
       tbody.innerHTML = "";
-      document.getElementById("leads-count-badge").innerText = customerLeads.length;
+      
+      const countBadge = document.getElementById("leads-count-badge");
+      if (countBadge) countBadge.innerText = (leadsToRender || []).length;
 
       if (!leadsToRender || leadsToRender.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="7" class="text-center py-4 text-secondary">No inquiries recorded yet.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7" class="text-center py-4 text-secondary">No customer inquiries found. Submit one via user.html to test.</td></tr>`;
         return;
       }
 
       leadsToRender.forEach((lead, idx) => {
         const tr = document.createElement("tr");
-        const formattedDate = lead.timestamp ? new Date(lead.timestamp).toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric' }) : 'N/A';
-        const cleanPhone = (lead.mobileNumber || "").replace(/[^0-9]/g, '');
+        const cleanPhone = String(lead.mobileNumber || "").replace(/[^0-9]/g, '');
 
         tr.innerHTML = `
-          <td class="small text-secondary">${formattedDate}</td>
+          <td class="small text-secondary">${lead.timestamp || 'N/A'}</td>
           <td><strong>${lead.fullName || 'Guest Customer'}</strong></td>
-          <td><a href="tel:${cleanPhone}" class="text-info fw-bold text-decoration-none">${lead.mobileNumber || 'N/A'}</a></td>
+          <td><a href="tel:${cleanPhone}" class="text-info fw-bold text-decoration-none">${cleanPhone || 'N/A'}</a></td>
           <td class="small">${lead.email || 'None'}</td>
           <td><span class="badge bg-primary font-racing">${lead.modelRequested || 'General'}</span></td>
           <td class="small text-truncate" style="max-width: 150px;">${lead.message || 'None'}</td>
           <td>
-            <a href="https://wa.me/91${cleanPhone}?text=Hello%20${encodeURIComponent(lead.fullName || '')},%20greetings%20from%20Yamaha%20Sai%20Motors%20regarding%20your%20inquiry%20for%20${encodeURIComponent(lead.modelRequested || 'a bike')}." target="_blank" class="btn btn-sm btn-success" title="Chat on WhatsApp">
+            <a href="https://wa.me/91${cleanPhone}?text=Hello%20${encodeURIComponent(lead.fullName || '')},%20greetings%20from%20Yamaha%20Sai%20Motors." target="_blank" class="btn btn-sm btn-success" title="Chat on WhatsApp">
               <i class="bi bi-whatsapp"></i>
             </a>
             <button class="btn btn-sm btn-danger ms-1" onclick="deleteCustomerLead(${idx})"><i class="bi bi-trash"></i></button>
@@ -742,7 +806,7 @@
       if (!q) { renderCustomerLeadsTable(customerLeads); return; }
       const filtered = customerLeads.filter(l => 
         (l.fullName && l.fullName.toLowerCase().includes(q)) ||
-        (l.mobileNumber && l.mobileNumber.includes(q)) ||
+        (l.mobileNumber && String(l.mobileNumber).includes(q)) ||
         (l.modelRequested && l.modelRequested.toLowerCase().includes(q))
       );
       renderCustomerLeadsTable(filtered);
@@ -753,15 +817,27 @@
       try {
         const res = await fetch(`${APPS_SCRIPT_URL}?action=get_all`);
         const json = await res.json();
+        
         if (json.bookings && Array.isArray(json.bookings)) {
           customerLeads = json.bookings;
           saveLocalLeads();
           renderCustomerLeadsTable(customerLeads);
         }
-      } catch (err) { console.warn("Error fetching leads:", err); }
+        
+        if (json.data && Array.isArray(json.data) && json.data.length > 0) {
+          database = json.data;
+          saveLocal();
+          populateAllModelSelectors();
+          renderModelsTable();
+        }
+      } catch (err) {
+        console.warn("Could not sync live data from Google Sheets:", err);
+      }
     }
 
-    // Catalog & Trims
+    // =========================================================================
+    // 4. MODELS & CATALOG MANAGEMENT
+    // =========================================================================
     function renderModelsTable() {
       const tbody = document.getElementById("models-table-tbody");
       if (!tbody) return;
@@ -972,7 +1048,9 @@
     function saveAppsScriptEndpoint() {
       const u = document.getElementById("admin-apps-script-url").value.trim();
       localStorage.setItem("yamaha_apps_script_url", u);
-      APPS_SCRIPT_URL = u; alert("Apps Script URL saved!");
+      APPS_SCRIPT_URL = u;
+      alert("Google Apps Script URL saved! Synchronizing data now...");
+      fetchLiveLeadsFromSheet();
     }
 
     async function saveAndSyncAllToGoogleSheet() {
