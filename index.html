@@ -12,7 +12,7 @@
 
   <!-- Montserrat Font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,700&display=swap" rel="stylesheet">
 
   <style>
@@ -233,10 +233,10 @@
 
                 <!-- Video URL Configuration -->
                 <div class="p-3 rounded border border-secondary mb-3" style="background:var(--yamaha-card);">
-                  <h6 class="font-racing text-danger mb-1"><i class="bi bi-play-circle me-1"></i> Walkaround Video URL (YouTube or MP4)</h6>
-                  <p class="small text-secondary mb-2">Paste YouTube or direct MP4 link:</p>
+                  <h6 class="font-racing text-danger mb-1"><i class="bi bi-play-circle me-1"></i> Walkaround Video URL or Embed Code</h6>
+                  <p class="small text-secondary mb-2">Paste YouTube URL, direct MP4 link, or full <code>&lt;iframe&gt;</code> embed code:</p>
                   <div class="input-group mb-2">
-                    <input type="text" class="form-control" id="model-video-url-input" placeholder="https://www.youtube.com/watch?v=...">
+                    <textarea class="form-control" id="model-video-url-input" rows="2" placeholder="https://www.youtube.com/watch?v=... or <iframe ...></iframe>"></textarea>
                     <button class="btn btn-outline-danger font-racing" type="button" onclick="previewCurrentVideoInput()">Preview Video</button>
                   </div>
                 </div>
@@ -272,8 +272,8 @@
                 <input type="text" class="form-control" id="home-video-title-input" placeholder="e.g. 2026 Yamaha Official Showcase" required>
               </div>
               <div class="col-12 col-md-6">
-                <label class="form-label small text-secondary">Video URL (YouTube or MP4)</label>
-                <input type="text" class="form-control" id="home-video-url-input" placeholder="https://www.youtube.com/watch?v=..." required>
+                <label class="form-label small text-secondary">Video URL or Embed Code</label>
+                <input type="text" class="form-control" id="home-video-url-input" placeholder="https://www.youtube.com/watch?v=... or <iframe ...></iframe>" required>
               </div>
               <div class="col-12">
                 <button type="submit" class="btn btn-warning font-racing px-4 py-2 text-dark fw-bold">
@@ -523,7 +523,7 @@
         document.getElementById("admin-apps-script-url").value = APPS_SCRIPT_URL;
       }
 
-      const homeVidUrl = localStorage.getItem("yamaha_showcase_video_url") || "https://www.youtube.com/watch?v=og860ziXQOQ";
+      const homeVidUrl = localStorage.getItem("yamaha_showcase_video_url") || "https://www.youtube.com/watch?v=OTOBP7kAiuA";
       const homeVidTitle = localStorage.getItem("yamaha_showcase_video_title") || "2026 Yamaha Official Showcase";
       document.getElementById("home-video-url-input").value = homeVidUrl;
       document.getElementById("home-video-title-input").value = homeVidTitle;
@@ -555,8 +555,13 @@
     // =========================================================================
     function handleSaveHomeVideo(e) {
       e.preventDefault();
-      const url = document.getElementById("home-video-url-input").value.trim();
+      let url = document.getElementById("home-video-url-input").value.trim();
       const title = document.getElementById("home-video-title-input").value.trim();
+
+      if (url.includes("<iframe") && url.includes("src=")) {
+        const srcMatch = url.match(/src=["']([^"']+)["']/i);
+        if (srcMatch && srcMatch[1]) url = srcMatch[1];
+      }
 
       localStorage.setItem("yamaha_showcase_video_url", url);
       localStorage.setItem("yamaha_showcase_video_title", title);
@@ -577,7 +582,7 @@
     }
 
     // =========================================================================
-    // 2. PER-MODEL 360 & VIDEO STUDIO (UNIFIED INPUT)
+    // 2. PER-MODEL 360 & VIDEO STUDIO
     // =========================================================================
     function populateAllModelSelectors() {
       const selects = ["video-model-select", "color-model-select", "specs-model-select", "img-model-select", "acc-model-select", "ins-model-select"];
@@ -620,12 +625,13 @@
         return;
       }
 
-      if (val.endsWith("/")) val += "1.webp";
-      else if (!val.endsWith(".webp") && !val.endsWith(".png") && !val.endsWith(".jpg")) val += "/1.webp";
+      let testImg = val;
+      if (testImg.endsWith("/")) testImg += "1.webp";
+      else if (!testImg.endsWith(".webp") && !testImg.endsWith(".png") && !testImg.endsWith(".jpg")) testImg += "/1.webp";
 
       box.innerHTML = `
         <div class="w-100 h-100 d-flex align-items-center justify-content-center bg-dark">
-          <img src="${val}" class="w-75 h-75 object-fit-contain" alt="Frame 1" onerror="this.src='https://placehold.co/400x250/0E1626/00F0FF?text=Invalid+Image+Link'">
+          <img src="${testImg}" class="w-75 h-75 object-fit-contain" alt="Frame 1" onerror="this.src='https://placehold.co/400x250/0E1626/00F0FF?text=Invalid+Image+Link'">
         </div>
       `;
       document.getElementById("media-status-tag").innerText = "Previewing Sequence Frame 1";
@@ -633,12 +639,18 @@
     }
 
     function previewCurrentVideoInput() {
-      const url = document.getElementById("model-video-url-input").value.trim();
+      let url = document.getElementById("model-video-url-input").value.trim();
       const box = document.getElementById("model-media-preview-box");
       if (!url) {
         box.innerHTML = `<div class="p-4 text-center text-secondary">No Video URL entered yet.</div>`;
         return;
       }
+
+      if (url.includes("<iframe") && url.includes("src=")) {
+        const srcMatch = url.match(/src=["']([^"']+)["']/i);
+        if (srcMatch && srcMatch[1]) url = srcMatch[1];
+      }
+
       const ytMatch = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=|shorts\/))([\w-]{11})/);
       if (ytMatch && ytMatch[1]) {
         box.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${ytMatch[1]}?autoplay=1&mute=1&playsinline=1&controls=1" class="w-100 h-100" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`;
@@ -672,6 +684,7 @@
       alert(`360° URL and Video settings saved successfully for ${bike.name}!`);
     }
 
+    // Customer Leads
     function loadLocalCustomerLeads() {
       const stored = localStorage.getItem("yamaha_customer_leads");
       if (stored) {
@@ -748,6 +761,7 @@
       } catch (err) { console.warn("Error fetching leads:", err); }
     }
 
+    // Catalog & Trims
     function renderModelsTable() {
       const tbody = document.getElementById("models-table-tbody");
       if (!tbody) return;
