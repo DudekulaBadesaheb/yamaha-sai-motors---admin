@@ -1,18 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-IN">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Yamaha Sai Motors | Admin Console, Model Video Studio & Leads</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <title>Yamaha Sai Motors | Admin Console & Studio Hub</title>
+
   <!-- Bootstrap 5 CSS & Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <!-- Montserrat Font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Rajdhani:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,700&display=swap" rel="stylesheet">
+
   <style>
     :root {
-      --yamaha-navy: #070B14;
+      --yamaha-navy: #050811;
       --yamaha-surface: #0E1626;
       --yamaha-card: #141F36;
       --yamaha-blue: #0044EE;
@@ -20,135 +25,126 @@
       --yamaha-red: #E60012;
       --border-glow: rgba(0, 240, 255, 0.25);
       --border-subtle: rgba(255, 255, 255, 0.08);
+      --neon-shadow: 0 0 14px rgba(0, 240, 255, 0.25);
     }
-    body {
+    * { box-sizing: border-box; }
+    html, body {
       background-color: var(--yamaha-navy);
       color: #fff;
-      font-family: 'Montserrat', sans-serif;
+      font-family: 'Montserrat', sans-serif !important;
       min-height: 100vh;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 10% 10%, rgba(0, 68, 238, 0.16) 0%, transparent 45%),
+        radial-gradient(circle at 90% 90%, rgba(0, 240, 255, 0.12) 0%, transparent 50%),
+        linear-gradient(to bottom, #070B14, #0A101C);
     }
-    .font-racing { font-family: 'Rajdhani', sans-serif; text-transform: uppercase; }
+    .font-racing { 
+      font-family: 'Montserrat', sans-serif !important; 
+      font-weight: 800 !important; 
+      text-transform: uppercase !important; 
+      letter-spacing: 0.5px;
+    }
 
-    /* Passcode Lock Screen */
     #lockscreen-overlay {
-      position: fixed;
-      inset: 0;
+      position: fixed; inset: 0;
       background: radial-gradient(circle at center, #101B30 0%, #060910 100%);
-      z-index: 2000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      z-index: 3000;
+      display: flex; align-items: center; justify-content: center;
+      padding: 1.5rem;
     }
     .lock-card {
       background: var(--yamaha-surface);
       border: 1px solid var(--border-glow);
-      border-radius: 16px;
-      width: 100%;
-      max-width: 420px;
-      padding: 2.5rem;
-      box-shadow: 0 10px 40px rgba(0, 68, 238, 0.35);
+      border-radius: 20px;
+      width: 100%; max-width: 400px;
+      padding: 2.25rem 1.75rem;
+      box-shadow: 0 10px 40px rgba(0, 68, 238, 0.4);
     }
 
-    /* Admin Container Elements */
+    header.admin-header {
+      background: rgba(7, 11, 20, 0.95);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border-glow);
+      position: sticky; top: 0; z-index: 1030;
+    }
+    .brand-logo { height: 38px; object-fit: contain; }
+
+    .admin-tab-nav-wrapper {
+      overflow-x: auto; white-space: nowrap; padding-bottom: 6px;
+      scrollbar-width: thin; scrollbar-color: var(--yamaha-cyan) var(--yamaha-surface);
+    }
+    .nav-pills { flex-wrap: nowrap; }
+    .nav-pills .nav-link {
+      color: #8E9DB5; border: 1px solid var(--border-subtle);
+      border-radius: 25px; padding: 8px 18px; margin-right: 8px;
+      font-size: 0.85rem; font-weight: 600; white-space: nowrap; background: var(--yamaha-surface);
+      transition: all 0.2s ease;
+    }
+    .nav-pills .nav-link.active {
+      background: var(--yamaha-blue); border-color: var(--yamaha-cyan);
+      color: #fff; box-shadow: var(--neon-shadow);
+    }
+
     .admin-card {
       background: var(--yamaha-surface);
       border: 1px solid var(--border-subtle);
-      border-radius: 14px;
+      border-radius: 16px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.5);
     }
+    .form-control, .form-select {
+      background-color: var(--yamaha-card) !important;
+      border: 1px solid var(--border-subtle) !important;
+      color: #fff !important; border-radius: 10px;
+      font-family: 'Montserrat', sans-serif;
+    }
+    .form-control:focus, .form-select:focus {
+      border-color: var(--yamaha-cyan) !important;
+      box-shadow: var(--neon-shadow) !important;
+    }
+
+    .video-preview-wrapper {
+      position: relative; padding-bottom: 56.25%; height: 0;
+      overflow: hidden; border-radius: 14px; background: #000;
+      border: 1px solid var(--border-glow);
+    }
+    .video-preview-wrapper iframe, .video-preview-wrapper video {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;
+    }
+
     .table-dark {
       --bs-table-bg: var(--yamaha-surface);
       --bs-table-border-color: var(--border-subtle);
+      font-family: 'Montserrat', sans-serif;
     }
-    .form-control, .form-select {
-      background-color: var(--yamaha-card);
-      border: 1px solid var(--border-subtle);
-      color: #fff;
-    }
-    .form-control:focus, .form-select:focus {
-      background-color: var(--yamaha-card);
-      border-color: var(--yamaha-cyan);
-      color: #fff;
-      box-shadow: 0 0 10px rgba(0, 240, 255, 0.25);
-    }
-    .nav-pills .nav-link {
-      color: #8E9DB5;
-      border: 1px solid var(--border-subtle);
-      margin-right: 6px;
-      margin-bottom: 6px;
-      transition: all 0.2s ease;
-    }
-    .nav-pills .nav-link.active, .nav-pills .nav-link:hover {
-      background: var(--yamaha-blue);
-      border-color: var(--yamaha-cyan);
-      color: #fff;
-      box-shadow: 0 0 12px rgba(0, 240, 255, 0.2);
-    }
+
     .img-preview-card {
-      position: relative;
-      width: 140px;
-      height: 105px;
-      border-radius: 8px;
-      overflow: hidden;
-      border: 1px solid var(--border-subtle);
-      background: #000;
+      position: relative; width: 110px; height: 80px;
+      border-radius: 8px; overflow: hidden; border: 1px solid var(--border-subtle); background: #000;
     }
     .img-preview-card img { width: 100%; height: 100%; object-fit: contain; }
     .img-del-btn {
-      position: absolute;
-      top: 4px; right: 4px;
-      background: rgba(230, 0, 18, 0.85);
-      border: none; color: #fff;
-      border-radius: 4px; padding: 2px 6px;
-      font-size: 0.75rem; cursor: pointer;
+      position: absolute; top: 4px; right: 4px;
+      background: rgba(230, 0, 18, 0.85); border: none; color: #fff;
+      border-radius: 4px; padding: 2px 6px; font-size: 0.75rem; cursor: pointer;
     }
-    .img-del-btn:hover { background: var(--yamaha-red); }
 
     .color-edit-card {
       background: var(--yamaha-card);
       border: 1px solid var(--border-subtle);
-      border-radius: 8px;
+      border-radius: 10px;
       padding: 10px;
-    }
-
-    .lead-badge {
-      font-size: 0.75rem;
-      padding: 4px 8px;
-      border-radius: 6px;
-    }
-
-    .video-preview-wrapper {
-      position: relative;
-      padding-bottom: 56.25%;
-      height: 0;
-      overflow: hidden;
-      border-radius: 12px;
-      background: #000;
-      border: 1px solid var(--border-glow);
-    }
-    .video-preview-wrapper iframe,
-    .video-preview-wrapper video {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      border: none;
     }
   </style>
 </head>
 <body>
 
-  <!-- =========================================================================
-       1. SECURITY LOCK SCREEN (Passcode: 123456789)
-       ========================================================================= -->
+  <!-- Passcode Lock -->
   <div id="lockscreen-overlay">
     <div class="lock-card text-center">
-      <div class="mb-3">
-        <i class="bi bi-shield-lock display-4" style="color:var(--yamaha-cyan);"></i>
-      </div>
+      <div class="mb-3"><i class="bi bi-shield-lock display-4" style="color:var(--yamaha-cyan);"></i></div>
       <h3 class="font-racing fw-bold">Yamaha Sai Motors</h3>
       <p class="text-secondary small">Authorized Admin Authentication</p>
-      
       <form onsubmit="handleAdminLogin(event)">
         <div class="mb-3 text-start">
           <label class="form-label small text-secondary">Security Passcode</label>
@@ -160,403 +156,341 @@
     </div>
   </div>
 
-  <!-- =========================================================================
-       2. AUTHENTICATED ADMIN DASHBOARD
-       ========================================================================= -->
-  <div class="container-fluid py-4 px-lg-5 d-none" id="admin-main-view">
-    <div class="d-flex flex-wrap justify-content-between align-items-center pb-3 mb-4 border-bottom border-secondary">
-      <div class="d-flex align-items-center gap-3">
-        <img src="https://images.seeklogo.com/logo-png/15/2/yamaha-logo-png_seeklogo-154896.png" 
-             alt="Yamaha" style="height:38px;"
-             onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/8/8b/Yamaha_Motor_logo.svg'">
-        <div>
-          <h2 class="h3 font-racing fw-bold text-white mb-0">Yamaha Sai Motors <span style="color:var(--yamaha-cyan);">Admin Console</span></h2>
-          <span class="text-secondary small">Per-Model Video Uploads, Leads, Models, Trims, 18-Param Specs & Cloud Sync</span>
+  <!-- Authenticated Console -->
+  <div class="d-none" id="admin-main-view">
+    <header class="admin-header py-2 px-3 px-lg-4">
+      <div class="container-fluid d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center gap-2">
+          <img src="https://images.seeklogo.com/logo-png/15/2/yamaha-logo-png_seeklogo-154896.png" alt="Yamaha" class="brand-logo" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/8/8b/Yamaha_Motor_logo.svg'">
+          <h1 class="h5 mb-0 font-racing text-white fw-bold">Yamaha <span style="color:var(--yamaha-cyan);">Sai Motors Admin</span></h1>
+        </div>
+        <div class="d-flex gap-2">
+          <button class="btn btn-sm btn-outline-info font-racing" onclick="saveAndSyncAllToGoogleSheet()">Sync Sheets</button>
+          <button class="btn btn-sm btn-danger font-racing" onclick="lockAdminSession()">Lock</button>
         </div>
       </div>
-      <div class="d-flex gap-2">
-        <button class="btn btn-outline-info font-racing" onclick="saveAndSyncAllToGoogleSheet()">
-          <i class="bi bi-cloud-arrow-up me-1"></i> Sync To Google Sheets
-        </button>
-        <button class="btn btn-danger font-racing" onclick="lockAdminSession()">
-          <i class="bi bi-box-arrow-right me-1"></i> Lock
-        </button>
+    </header>
+
+    <main class="container-fluid py-3 px-2 px-md-4 px-lg-5">
+      <div class="admin-tab-nav-wrapper mb-3">
+        <ul class="nav nav-pills" id="adminTab">
+          <li class="nav-item">
+            <button class="nav-link active font-racing" data-bs-toggle="pill" data-bs-target="#tab-media-studio">
+              <i class="bi bi-arrow-repeat me-1 text-info"></i> Model 360 & Video Studio
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link font-racing" data-bs-toggle="pill" data-bs-target="#tab-home-video">
+              <i class="bi bi-house-play-fill me-1 text-warning"></i> Home Page Video
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link font-racing" data-bs-toggle="pill" data-bs-target="#tab-bookings">
+              <i class="bi bi-people-fill me-1 text-success"></i> Customer Leads
+              <span class="badge bg-danger ms-1" id="leads-count-badge">0</span>
+            </button>
+          </li>
+          <li class="nav-item"><button class="nav-link font-racing" data-bs-toggle="pill" data-bs-target="#tab-models">Models & Trims</button></li>
+          <li class="nav-item"><button class="nav-link font-racing" data-bs-toggle="pill" data-bs-target="#tab-colors">Colors & Liveries</button></li>
+          <li class="nav-item"><button class="nav-link font-racing" data-bs-toggle="pill" data-bs-target="#tab-specs">18-Param Specs</button></li>
+          <li class="nav-item"><button class="nav-link font-racing" data-bs-toggle="pill" data-bs-target="#tab-images">Photo Studio</button></li>
+          <li class="nav-item"><button class="nav-link font-racing" data-bs-toggle="pill" data-bs-target="#tab-accessories">Extrafiting</button></li>
+          <li class="nav-item"><button class="nav-link font-racing" data-bs-toggle="pill" data-bs-target="#tab-insurance">Insurance</button></li>
+          <li class="nav-item"><button class="nav-link font-racing" data-bs-toggle="pill" data-bs-target="#tab-add">Add Bike</button></li>
+          <li class="nav-item"><button class="nav-link font-racing" data-bs-toggle="pill" data-bs-target="#tab-settings">Apps Script API</button></li>
+        </ul>
       </div>
-    </div>
 
-    <!-- Navigation Tabs -->
-    <ul class="nav nav-pills mb-4" id="adminTab" role="tablist">
-      <li class="nav-item">
-        <button class="nav-link active font-racing" data-bs-toggle="pill" data-bs-target="#tab-model-videos">
-          <i class="bi bi-camera-reels-fill me-1 text-danger"></i> Per-Model Video Studio
-        </button>
-      </li>
-      <li class="nav-item">
-        <button class="nav-link font-racing" data-bs-toggle="pill" data-bs-target="#tab-bookings">
-          <i class="bi bi-people-fill me-1 text-info"></i> Customer Leads
-          <span class="badge bg-danger ms-1" id="leads-count-badge">0</span>
-        </button>
-      </li>
-      <li class="nav-item">
-        <button class="nav-link font-racing" data-bs-toggle="pill" data-bs-target="#tab-models">Models & Trims Pricing</button>
-      </li>
-      <li class="nav-item">
-        <button class="nav-link font-racing" data-bs-toggle="pill" data-bs-target="#tab-colors">Colorways & Liveries</button>
-      </li>
-      <li class="nav-item">
-        <button class="nav-link font-racing" data-bs-toggle="pill" data-bs-target="#tab-specs">18-Param Specifications</button>
-      </li>
-      <li class="nav-item">
-        <button class="nav-link font-racing" data-bs-toggle="pill" data-bs-target="#tab-images">Multi-Image Studio</button>
-      </li>
-      <li class="nav-item">
-        <button class="nav-link font-racing" data-bs-toggle="pill" data-bs-target="#tab-accessories">Model Extrafiting</button>
-      </li>
-      <li class="nav-item">
-        <button class="nav-link font-racing" data-bs-toggle="pill" data-bs-target="#tab-insurance">Model Insurance</button>
-      </li>
-      <li class="nav-item">
-        <button class="nav-link font-racing" data-bs-toggle="pill" data-bs-target="#tab-add">Add New Model</button>
-      </li>
-      <li class="nav-item">
-        <button class="nav-link font-racing" data-bs-toggle="pill" data-bs-target="#tab-settings">Apps Script API</button>
-      </li>
-    </ul>
+      <div class="tab-content">
 
-    <div class="tab-content" id="adminTabContent">
-
-      <!-- =====================================================================
-           TAB 1: PER-MODEL SEPARATE VIDEO STUDIO (URL LINK & DIRECT FILE UPLOAD)
-           ===================================================================== -->
-      <div class="tab-pane fade show active" id="tab-model-videos">
-        <div class="admin-card p-4">
-          <div class="row align-items-center mb-4">
-            <div class="col-md-6">
-              <h4 class="font-racing text-cyan mb-1" style="color:var(--yamaha-cyan);">
-                <i class="bi bi-film me-2"></i>Per-Model Video Studio & Upload Manager
-              </h4>
-              <span class="small text-secondary">
-                Upload or link a unique walkaround video for each bike model individually. It will immediately play inside <code>user.html</code> when that model is opened!
-              </span>
+        <!-- TAB 1: PER-MODEL 360 & VIDEO STUDIO -->
+        <div class="tab-pane fade show active" id="tab-media-studio">
+          <div class="admin-card p-3 p-md-4">
+            <div class="row align-items-center mb-3 g-2">
+              <div class="col-12 col-md-6">
+                <h4 class="font-racing text-cyan mb-1" style="color:var(--yamaha-cyan);">
+                  <i class="bi bi-camera-reels me-2"></i>Per-Model 360° & Video Studio
+                </h4>
+                <span class="small text-secondary">Configure the interactive 360 viewer (BikeDekho link or 40-frame sequence) and walkaround video.</span>
+              </div>
+              <div class="col-12 col-md-6">
+                <label class="form-label small text-secondary fw-bold mb-1">Select Bike Model:</label>
+                <select class="form-select border-info" id="video-model-select" onchange="renderModelMediaSettings()"></select>
+              </div>
             </div>
-            <div class="col-md-6">
-              <label class="form-label small text-secondary fw-bold">Select Model to Manage Video:</label>
-              <select class="form-select border-info fs-6" id="video-model-select" onchange="renderModelVideoSettings()"></select>
+
+            <div class="row g-3">
+              <div class="col-12 col-lg-6">
+                <!-- Unified 360 Input -->
+                <div class="p-3 rounded border border-secondary mb-3" style="background:var(--yamaha-card);">
+                  <h6 class="font-racing text-info mb-1"><i class="bi bi-arrow-repeat me-1"></i> 360° View Link</h6>
+                  <p class="small text-secondary mb-2">Paste 360 image link (e.g. <code>https://yamaha-r2.yamaha-motor-india.com/assets/images/360/grey/1.webp</code>) or direct 360 web link:</p>
+                  <div class="input-group mb-2">
+                    <input type="text" class="form-control" id="model-360-unified-input" placeholder="Paste 360 image or web link here...">
+                    <button class="btn btn-outline-info font-racing" type="button" onclick="previewUnified360()">Preview 360</button>
+                  </div>
+                </div>
+
+                <!-- Video URL Configuration -->
+                <div class="p-3 rounded border border-secondary mb-3" style="background:var(--yamaha-card);">
+                  <h6 class="font-racing text-danger mb-1"><i class="bi bi-play-circle me-1"></i> Walkaround Video URL (YouTube or MP4)</h6>
+                  <p class="small text-secondary mb-2">Paste YouTube or direct MP4 link:</p>
+                  <div class="input-group mb-2">
+                    <input type="text" class="form-control" id="model-video-url-input" placeholder="https://www.youtube.com/watch?v=...">
+                    <button class="btn btn-outline-danger font-racing" type="button" onclick="previewCurrentVideoInput()">Preview Video</button>
+                  </div>
+                </div>
+
+                <button type="button" class="btn btn-primary font-racing py-2 fs-6 w-100" onclick="saveSelectedModelMedia()">
+                  <i class="bi bi-save me-1"></i> Save 360 & Video Settings For This Model
+                </button>
+              </div>
+
+              <!-- Live Preview Stage -->
+              <div class="col-12 col-lg-6">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <span class="small font-racing text-secondary">Live Preview for <strong id="media-preview-model-name" class="text-info">Model</strong>:</span>
+                  <span class="badge bg-secondary font-racing" id="media-status-tag">Status</span>
+                </div>
+                <div class="video-preview-wrapper" id="model-media-preview-box"></div>
+              </div>
             </div>
           </div>
+        </div>
 
-          <div class="row g-4">
-            <!-- Left Column: Video Link or File Upload Inputs -->
-            <div class="col-lg-6">
-              <div class="p-3 rounded border border-secondary mb-3" style="background:var(--yamaha-card);">
-                <h5 class="font-racing text-white mb-2">Option A: Link Video URL (YouTube, MP4 or Vimeo)</h5>
-                <p class="small text-secondary mb-2">Paste any YouTube video link (e.g. <code>https://youtu.be/...</code> or <code>https://www.youtube.com/watch?v=...</code>) or direct MP4 URL:</p>
-                <div class="input-group mb-2">
-                  <input type="text" class="form-control" id="model-video-url-input" placeholder="https://youtu.be/og860ziXQOQ">
-                  <button class="btn btn-outline-info font-racing" type="button" onclick="previewCurrentVideoInput()">
-                    <i class="bi bi-eye me-1"></i> Preview Link
-                  </button>
-                </div>
+        <!-- TAB 2: HOME PAGE VIDEO MANAGER -->
+        <div class="tab-pane fade" id="tab-home-video">
+          <div class="admin-card p-3 p-md-4">
+            <h4 class="font-racing text-warning mb-2">
+              <i class="bi bi-house-play-fill me-2"></i>Home Page Video Manager
+            </h4>
+            <p class="small text-secondary mb-3">Update the featured walkaround video playing on the landing page (<code>home.html</code>).</p>
+            
+            <form onsubmit="handleSaveHomeVideo(event)" class="row g-3">
+              <div class="col-12 col-md-6">
+                <label class="form-label small text-secondary">Home Page Video Title</label>
+                <input type="text" class="form-control" id="home-video-title-input" placeholder="e.g. 2026 Yamaha Official Showcase" required>
               </div>
-
-              <div class="p-3 rounded border border-secondary mb-4" style="background:var(--yamaha-card);">
-                <h5 class="font-racing text-white mb-2">Option B: Direct Video File Upload</h5>
-                <p class="small text-secondary mb-2">Select a video file from your computer (<code>.mp4</code>, <code>.webm</code>, <code>.mov</code>):</p>
-                <input type="file" class="form-control mb-2" id="model-video-file-input" accept="video/mp4,video/webm,video/quicktime" onchange="handleDirectVideoFileUpload(event)">
-                <div id="video-upload-status" class="small text-info d-none">
-                  <i class="bi bi-check-circle me-1"></i> Video file loaded into preview! Click Save below to confirm.
-                </div>
+              <div class="col-12 col-md-6">
+                <label class="form-label small text-secondary">Video URL (YouTube or MP4)</label>
+                <input type="text" class="form-control" id="home-video-url-input" placeholder="https://www.youtube.com/watch?v=..." required>
               </div>
+              <div class="col-12">
+                <button type="submit" class="btn btn-warning font-racing px-4 py-2 text-dark fw-bold">
+                  <i class="bi bi-save me-1"></i> Save Home Page Video
+                </button>
+              </div>
+            </form>
 
+            <hr class="border-secondary my-4">
+            <h6 class="font-racing text-white mb-2">Home Video Preview:</h6>
+            <div class="video-preview-wrapper" style="max-width: 650px;" id="home-video-preview-box"></div>
+          </div>
+        </div>
+
+        <!-- TAB 3: CUSTOMER LEADS DASHBOARD -->
+        <div class="tab-pane fade" id="tab-bookings">
+          <div class="admin-card p-3 p-md-4">
+            <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
+              <div>
+                <h4 class="font-racing text-cyan mb-0" style="color:var(--yamaha-cyan);">Customer Leads & Inquiries</h4>
+                <span class="small text-secondary">All inquiries submitted via <code>user.html</code></span>
+              </div>
               <div class="d-flex gap-2">
-                <button type="button" class="btn btn-primary font-racing px-4 py-2 fs-5 flex-grow-1" onclick="saveSelectedModelVideo()">
-                  <i class="bi bi-save me-1"></i> Save Video For Selected Model
-                </button>
-                <button type="button" class="btn btn-outline-danger font-racing px-3" onclick="removeSelectedModelVideo()" title="Remove video for this model">
-                  <i class="bi bi-trash"></i>
-                </button>
+                <input type="text" class="form-control form-control-sm" id="leads-search-input" placeholder="Search by name, phone..." oninput="filterCustomerLeads(this.value)">
+                <button class="btn btn-sm btn-outline-info font-racing" onclick="fetchLiveLeadsFromSheet()"><i class="bi bi-arrow-clockwise"></i> Refresh</button>
               </div>
             </div>
-
-            <!-- Right Column: Live Video Player Preview -->
-            <div class="col-lg-6">
-              <div class="d-flex justify-content-between align-items-center mb-2">
-                <span class="small font-racing text-secondary">Live Video Player Preview for <strong id="video-preview-model-name" class="text-info">R15 V4</strong>:</span>
-                <span class="badge bg-secondary font-racing" id="video-status-tag">Status: Unsaved Changes</span>
-              </div>
-              <div class="video-preview-wrapper" id="model-video-preview-box">
-                <!-- Injected via JavaScript -->
-              </div>
+            <div class="table-responsive">
+              <table class="table table-dark table-hover align-middle mb-0">
+                <thead>
+                  <tr class="small text-secondary">
+                    <th>Date</th>
+                    <th>Customer Name</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                    <th>Model</th>
+                    <th>Message</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="customer-leads-tbody"></tbody>
+              </table>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- =====================================================================
-           TAB 2: CUSTOMER LEADS & TEST-RIDE SUBMISSIONS DASHBOARD
-           ===================================================================== -->
-      <div class="tab-pane fade" id="tab-bookings">
-        <div class="admin-card p-4">
-          <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
-            <div>
-              <h4 class="font-racing text-cyan mb-0" style="color:var(--yamaha-cyan);">
-                <i class="bi bi-inbox-fill me-2"></i>Customer Bookings & Test Ride Leads
-              </h4>
-              <span class="small text-secondary">Real-time inquiries submitted through the user contact form.</span>
+        <!-- TAB 4: MODELS & TRIMS -->
+        <div class="tab-pane fade" id="tab-models">
+          <div class="admin-card p-3 p-md-4">
+            <h4 class="font-racing text-cyan mb-3" style="color:var(--yamaha-cyan);">Models, Names & Trim Pricing</h4>
+            <div class="table-responsive">
+              <table class="table table-dark table-hover align-middle mb-0">
+                <thead>
+                  <tr class="small text-secondary">
+                    <th>Model Name</th>
+                    <th>Compliance</th>
+                    <th>Basic Price (₹)</th>
+                    <th>Middle Price (₹)</th>
+                    <th>Top Price (₹)</th>
+                    <th>Active Offer</th>
+                    <th>Delete</th>
+                  </tr>
+                </thead>
+                <tbody id="models-table-tbody"></tbody>
+              </table>
             </div>
-            <div class="d-flex gap-2">
-              <input type="text" class="form-control form-control-sm" id="leads-search-input" placeholder="Search leads by name, phone, or model..." style="width: 260px;" oninput="filterCustomerLeads(this.value)">
-              <button class="btn btn-sm btn-outline-info font-racing" onclick="fetchLiveLeadsFromSheet()">
-                <i class="bi bi-arrow-clockwise me-1"></i> Refresh Leads
-              </button>
-              <button class="btn btn-sm btn-outline-danger font-racing" onclick="clearLocalLeads()">
-                <i class="bi bi-trash me-1"></i> Clear Local
-              </button>
-            </div>
-          </div>
-
-          <div class="table-responsive">
-            <table class="table table-dark table-hover align-middle">
-              <thead>
-                <tr>
-                  <th>Date & Time</th>
-                  <th>Customer Name</th>
-                  <th>Mobile Number</th>
-                  <th>Email ID</th>
-                  <th>Requested Model & Trim</th>
-                  <th>Visit Date</th>
-                  <th>Inquiry Purpose</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody id="customer-leads-tbody"></tbody>
-            </table>
           </div>
         </div>
-      </div>
 
-      <!-- TAB 3: Models & Trims Pricing -->
-      <div class="tab-pane fade" id="tab-models">
-        <div class="admin-card p-4">
-          <h4 class="font-racing text-cyan mb-3" style="color:var(--yamaha-cyan);">Model Catalog, Name Modification & Trims</h4>
-          <div class="table-responsive">
-            <table class="table table-dark table-hover align-middle">
-              <thead>
-                <tr>
-                  <th style="min-width: 180px;">Model Name (Editable)</th>
-                  <th>Compliance Badge</th>
-                  <th>Basic Price (₹)</th>
-                  <th>Middle Price (₹)</th>
-                  <th>Top Price (₹)</th>
-                  <th>Active Offer Tag</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody id="models-table-tbody"></tbody>
-            </table>
+        <!-- TAB 5: COLORS & LIVERIES -->
+        <div class="tab-pane fade" id="tab-colors">
+          <div class="admin-card p-3 p-md-4">
+            <div class="row g-2 align-items-center mb-3">
+              <div class="col-12 col-md-6"><h4 class="font-racing text-cyan mb-0" style="color:var(--yamaha-cyan);">Color Schemes & Swatches</h4></div>
+              <div class="col-12 col-md-6"><select class="form-select" id="color-model-select" onchange="renderColorsManager()"></select></div>
+            </div>
+            <div class="row g-2 mb-3" id="colors-list-container"></div>
+            <div class="p-3 rounded border border-secondary" style="background:var(--yamaha-card);">
+              <h6 class="font-racing text-white mb-2">Add New Colorway</h6>
+              <form class="row g-2 align-items-center" onsubmit="handleAddColorway(event)">
+                <div class="col-7 col-md-6"><input type="text" class="form-control" id="add-color-name" placeholder="Colorway Name" required></div>
+                <div class="col-5 col-md-3 d-flex align-items-center gap-1">
+                  <label class="small text-secondary mb-0">Hex:</label>
+                  <input type="color" class="form-control form-control-color" id="add-color-hex" value="#0050FF" style="width: 45px;">
+                </div>
+                <div class="col-12 col-md-3"><button type="submit" class="btn btn-primary w-100 font-racing">Add Colorway</button></div>
+              </form>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- TAB 4: Colorways & Liveries -->
-      <div class="tab-pane fade" id="tab-colors">
-        <div class="admin-card p-4">
-          <div class="row g-3 mb-4 align-items-center">
-            <div class="col-md-6">
-              <h4 class="font-racing text-cyan mb-0" style="color:var(--yamaha-cyan);">Color Schemes & Swatches Modification</h4>
+        <!-- TAB 6: 18-PARAMETER SPECIFICATIONS -->
+        <div class="tab-pane fade" id="tab-specs">
+          <div class="admin-card p-3 p-md-4">
+            <div class="row g-2 align-items-center mb-3">
+              <div class="col-12 col-md-6"><h4 class="font-racing text-cyan mb-0" style="color:var(--yamaha-cyan);">18-Parameter Technical Specifications</h4></div>
+              <div class="col-12 col-md-6"><select class="form-select" id="specs-model-select" onchange="renderModelSpecsEditor()"></select></div>
             </div>
-            <div class="col-md-6">
-              <label class="form-label small text-secondary">Select Model</label>
-              <select class="form-select" id="color-model-select" onchange="renderColorsManager()"></select>
-            </div>
-          </div>
-          <div class="row g-3 mb-4" id="colors-list-container"></div>
-          <div class="p-3 rounded border border-secondary" style="background:var(--yamaha-card);">
-            <h5 class="font-racing" style="color:var(--yamaha-cyan);">Add Brand New Colorway</h5>
-            <form class="row g-2 align-items-center" onsubmit="handleAddColorway(event)">
-              <div class="col-md-5">
-                <input type="text" class="form-control" id="add-color-name" placeholder="Color Name (e.g. Monster Energy Edition)" required>
+            <form id="specs-editor-form" onsubmit="handleSaveModelSpecs(event)" class="row g-2">
+              <div class="col-12 p-3 rounded mb-2 border border-info" style="background:rgba(0, 68, 238, 0.15);">
+                <label class="form-label font-racing fw-bold" style="color:var(--yamaha-cyan);">Compliance Badge (e.g. BS6 Phase 2B Compliant)</label>
+                <input type="text" class="form-control" id="spec-edit-emissionStandard" required>
               </div>
-              <div class="col-md-3 d-flex align-items-center gap-2">
-                <label class="small text-secondary mb-0">Swatch:</label>
-                <input type="color" class="form-control form-control-color" id="add-color-hex" value="#0050FF" style="width: 50px;">
-              </div>
-              <div class="col-md-4">
-                <button type="submit" class="btn btn-primary w-100 font-racing">
-                  <i class="bi bi-palette me-1"></i> Add Colorway
-                </button>
-              </div>
+              <div class="col-6 col-md-4"><label class="small text-secondary">1. Displacement</label><input type="text" class="form-control" id="spec-edit-displacement" required></div>
+              <div class="col-6 col-md-4"><label class="small text-secondary">2. Max Power</label><input type="text" class="form-control" id="spec-edit-maxPower" required></div>
+              <div class="col-6 col-md-4"><label class="small text-secondary">3. Max Torque</label><input type="text" class="form-control" id="spec-edit-maxTorque" required></div>
+              <div class="col-6 col-md-4"><label class="small text-secondary">4. Top Speed</label><input type="text" class="form-control" id="spec-edit-topSpeed" required></div>
+              <div class="col-6 col-md-4"><label class="small text-secondary">5. Mileage</label><input type="text" class="form-control" id="spec-edit-mileage" required></div>
+              <div class="col-6 col-md-4"><label class="small text-secondary">6. Transmission</label><input type="text" class="form-control" id="spec-edit-transmission" required></div>
+              <div class="col-6 col-md-4"><label class="small text-secondary">7. Transmission Type</label><input type="text" class="form-control" id="spec-edit-transmissionType" required></div>
+              <div class="col-6 col-md-4"><label class="small text-secondary">8. Shift Pattern</label><input type="text" class="form-control" id="spec-edit-gearShiftPattern" required></div>
+              <div class="col-6 col-md-4"><label class="small text-secondary">9. Clutch</label><input type="text" class="form-control" id="spec-edit-clutch" required></div>
+              <div class="col-6 col-md-4"><label class="small text-secondary">10. Range</label><input type="text" class="form-control" id="spec-edit-ridingRange" required></div>
+              <div class="col-6 col-md-4"><label class="small text-secondary">11. Modes</label><input type="text" class="form-control" id="spec-edit-ridingModes" required></div>
+              <div class="col-6 col-md-4"><label class="small text-secondary">12. Engine Type</label><input type="text" class="form-control" id="spec-edit-engineType" required></div>
+              <div class="col-6 col-md-4"><label class="small text-secondary">13. Bore x Stroke</label><input type="text" class="form-control" id="spec-edit-boreStroke" required></div>
+              <div class="col-6 col-md-4"><label class="small text-secondary">14. Compression</label><input type="text" class="form-control" id="spec-edit-compressionRatio" required></div>
+              <div class="col-6 col-md-4"><label class="small text-secondary">15. Spark Plugs</label><input type="text" class="form-control" id="spec-edit-sparkPlugs" required></div>
+              <div class="col-6 col-md-4"><label class="small text-secondary">16. Battery</label><input type="text" class="form-control" id="spec-edit-battery" required></div>
+              <div class="col-6 col-md-4"><label class="small text-secondary">17. Fuel Type</label><input type="text" class="form-control" id="spec-edit-fuelType" required></div>
+              <div class="col-12 mt-3"><button type="submit" class="btn btn-primary font-racing w-100 py-2 fs-6">Save Specifications</button></div>
             </form>
           </div>
         </div>
-      </div>
 
-      <!-- TAB 5: 18-Parameter Specifications -->
-      <div class="tab-pane fade" id="tab-specs">
-        <div class="admin-card p-4">
-          <div class="row g-3 mb-4 align-items-center">
-            <div class="col-md-6">
-              <h4 class="font-racing text-cyan mb-0" style="color:var(--yamaha-cyan);">18-Parameter Technical Specifications Editor</h4>
+        <!-- TAB 7: PHOTO STUDIO -->
+        <div class="tab-pane fade" id="tab-images">
+          <div class="admin-card p-3 p-md-4">
+            <div class="row g-2 mb-3">
+              <div class="col-6"><select class="form-select" id="img-model-select" onchange="renderModelImageManager()"></select></div>
+              <div class="col-6"><select class="form-select" id="img-color-select" onchange="renderModelImages()"></select></div>
             </div>
-            <div class="col-md-6">
-              <label class="form-label small text-secondary">Select Model</label>
-              <select class="form-select" id="specs-model-select" onchange="renderModelSpecsEditor()"></select>
+            <div class="d-flex flex-wrap gap-2 mb-3 p-3 bg-dark rounded border border-secondary" id="active-images-gallery"></div>
+            <div class="p-3 rounded border border-secondary" style="background:var(--yamaha-card);">
+              <h6 class="font-racing text-white mb-2">Add Photo URL</h6>
+              <form class="row g-2" onsubmit="handleAddImageToModel(event)">
+                <div class="col-12 col-md-9"><input type="url" class="form-control" id="new-image-url-input" placeholder="Paste Direct Image URL" required></div>
+                <div class="col-12 col-md-3"><button type="submit" class="btn btn-primary w-100 font-racing">Add Photo</button></div>
+              </form>
             </div>
           </div>
-          <form id="specs-editor-form" onsubmit="handleSaveModelSpecs(event)" class="row g-3">
-            <div class="col-md-12 p-3 rounded mb-2 border border-info" style="background:rgba(0, 68, 238, 0.15);">
-              <label class="form-label font-racing fw-bold" style="color:var(--yamaha-cyan);">
-                <i class="bi bi-patch-check-fill me-1"></i> Emission Standard / Compliance Badge Label (e.g. BS6 Phase 2B Compliant)
-              </label>
-              <input type="text" class="form-control fs-5" id="spec-edit-emissionStandard" required>
-            </div>
-            <div class="col-md-4"><label class="form-label small text-secondary">1. Displacement</label><input type="text" class="form-control" id="spec-edit-displacement" required></div>
-            <div class="col-md-4"><label class="form-label small text-secondary">2. Max Power</label><input type="text" class="form-control" id="spec-edit-maxPower" required></div>
-            <div class="col-md-4"><label class="form-label small text-secondary">3. Max Torque</label><input type="text" class="form-control" id="spec-edit-maxTorque" required></div>
-            <div class="col-md-4"><label class="form-label small text-secondary">4. Top Speed</label><input type="text" class="form-control" id="spec-edit-topSpeed" required></div>
-            <div class="col-md-4"><label class="form-label small text-secondary">5. Mileage</label><input type="text" class="form-control" id="spec-edit-mileage" required></div>
-            <div class="col-md-4"><label class="form-label small text-secondary">6. Transmission</label><input type="text" class="form-control" id="spec-edit-transmission" required></div>
-            <div class="col-md-4"><label class="form-label small text-secondary">7. Transmission Type</label><input type="text" class="form-control" id="spec-edit-transmissionType" required></div>
-            <div class="col-md-4"><label class="form-label small text-secondary">8. Gear Shifting Pattern</label><input type="text" class="form-control" id="spec-edit-gearShiftPattern" required></div>
-            <div class="col-md-4"><label class="form-label small text-secondary">9. Clutch</label><input type="text" class="form-control" id="spec-edit-clutch" required></div>
-            <div class="col-md-4"><label class="form-label small text-secondary">10. Riding Range</label><input type="text" class="form-control" id="spec-edit-ridingRange" required></div>
-            <div class="col-md-4"><label class="form-label small text-secondary">11. Riding Modes</label><input type="text" class="form-control" id="spec-edit-ridingModes" required></div>
-            <div class="col-md-4"><label class="form-label small text-secondary">12. Engine Type</label><input type="text" class="form-control" id="spec-edit-engineType" required></div>
-            <div class="col-md-4"><label class="form-label small text-secondary">13. Bore x Stroke</label><input type="text" class="form-control" id="spec-edit-boreStroke" required></div>
-            <div class="col-md-4"><label class="form-label small text-secondary">14. Compression Ratio</label><input type="text" class="form-control" id="spec-edit-compressionRatio" required></div>
-            <div class="col-md-4"><label class="form-label small text-secondary">15. Spark Plugs</label><input type="text" class="form-control" id="spec-edit-sparkPlugs" required></div>
-            <div class="col-md-4"><label class="form-label small text-secondary">16. Battery</label><input type="text" class="form-control" id="spec-edit-battery" required></div>
-            <div class="col-md-4"><label class="form-label small text-secondary">17. Fuel Type</label><input type="text" class="form-control" id="spec-edit-fuelType" required></div>
-            <div class="col-12 mt-4">
-              <button type="submit" class="btn btn-primary font-racing px-4 py-2 fs-5">Save Specifications</button>
-            </div>
-          </form>
         </div>
-      </div>
 
-      <!-- TAB 6: Multi-Image Studio -->
-      <div class="tab-pane fade" id="tab-images">
-        <div class="admin-card p-4">
-          <div class="row g-3 mb-4 align-items-center">
-            <div class="col-md-6">
-              <label class="form-label small text-secondary">Select Model</label>
-              <select class="form-select" id="img-model-select" onchange="renderModelImageManager()"></select>
+        <!-- TAB 8: EXTRAFITING ACCESSORIES -->
+        <div class="tab-pane fade" id="tab-accessories">
+          <div class="admin-card p-3 p-md-4">
+            <div class="row g-2 align-items-center mb-3">
+              <div class="col-12 col-md-6"><h4 class="font-racing text-cyan mb-0" style="color:var(--yamaha-cyan);">Model Extrafiting</h4></div>
+              <div class="col-12 col-md-6"><select class="form-select" id="acc-model-select" onchange="renderAccessoriesManager()"></select></div>
             </div>
-            <div class="col-md-6">
-              <label class="form-label small text-secondary">Select Colorway</label>
-              <select class="form-select" id="img-color-select" onchange="renderModelImages()"></select>
+            <div class="table-responsive mb-3">
+              <table class="table table-dark table-hover align-middle mb-0">
+                <thead><tr class="small text-secondary"><th>Item Name</th><th>Price (₹)</th><th>Icon Class</th><th>Delete</th></tr></thead>
+                <tbody id="accessories-table-tbody"></tbody>
+              </table>
             </div>
-          </div>
-          <div class="d-flex flex-wrap gap-3 mb-4 p-3 bg-dark rounded border border-secondary" id="active-images-gallery"></div>
-          <div class="p-3 rounded border border-secondary" style="background:var(--yamaha-card);">
-            <h5 class="font-racing" style="color:var(--yamaha-cyan);">Add More Images</h5>
-            <form class="row g-2" onsubmit="handleAddImageToModel(event)">
-              <div class="col-md-9"><input type="url" class="form-control" id="new-image-url-input" placeholder="Paste Direct Image URL" required></div>
-              <div class="col-md-3"><button type="submit" class="btn btn-primary w-100 font-racing">Add Photo</button></div>
+            <form class="row g-2" onsubmit="handleAddAccessory(event)">
+              <div class="col-6 col-md-4"><input type="text" class="form-control" id="new-acc-name" placeholder="Item Name" required></div>
+              <div class="col-6 col-md-3"><input type="number" class="form-control" id="new-acc-price" placeholder="Price (₹)" required></div>
+              <div class="col-8 col-md-3"><input type="text" class="form-control" id="new-acc-icon" value="bi-gear"></div>
+              <div class="col-4 col-md-2"><button type="submit" class="btn btn-primary w-100 font-racing">Add</button></div>
             </form>
           </div>
         </div>
-      </div>
 
-      <!-- TAB 7: Accessories / Extrafiting -->
-      <div class="tab-pane fade" id="tab-accessories">
-        <div class="admin-card p-4">
-          <div class="row mb-3 align-items-center">
-            <div class="col-md-6"><h4 class="font-racing text-cyan mb-0" style="color:var(--yamaha-cyan);">Model Extrafiting Customizer</h4></div>
-            <div class="col-md-6"><select class="form-select" id="acc-model-select" onchange="renderAccessoriesManager()"></select></div>
+        <!-- TAB 9: INSURANCE -->
+        <div class="tab-pane fade" id="tab-insurance">
+          <div class="admin-card p-3 p-md-4">
+            <div class="row g-2 align-items-center mb-3">
+              <div class="col-12 col-md-6"><h4 class="font-racing text-cyan mb-0" style="color:var(--yamaha-cyan);">Model Insurance</h4></div>
+              <div class="col-12 col-md-6"><select class="form-select" id="ins-model-select" onchange="renderInsuranceManager()"></select></div>
+            </div>
+            <div class="table-responsive mb-3">
+              <table class="table table-dark table-hover align-middle mb-0">
+                <thead><tr class="small text-secondary"><th>Plan Name</th><th>Premium (₹)</th><th>Delete</th></tr></thead>
+                <tbody id="insurance-table-tbody"></tbody>
+              </table>
+            </div>
+            <form class="row g-2" onsubmit="handleAddInsurance(event)">
+              <div class="col-12 col-md-6"><input type="text" class="form-control" id="new-ins-name" placeholder="Insurance Plan Name" required></div>
+              <div class="col-8 col-md-4"><input type="number" class="form-control" id="new-ins-price" placeholder="Premium (₹)" required></div>
+              <div class="col-4 col-md-2"><button type="submit" class="btn btn-primary w-100 font-racing">Add</button></div>
+            </form>
           </div>
-          <div class="table-responsive">
-            <table class="table table-dark table-hover align-middle">
-              <thead><tr><th>Accessory Name</th><th>Price (₹)</th><th>Icon Class</th><th>Action</th></tr></thead>
-              <tbody id="accessories-table-tbody"></tbody>
-            </table>
-          </div>
-          <hr class="border-secondary my-3">
-          <form class="row g-2" onsubmit="handleAddAccessory(event)">
-            <div class="col-md-4"><input type="text" class="form-control" id="new-acc-name" placeholder="Accessory Name" required></div>
-            <div class="col-md-3"><input type="number" class="form-control" id="new-acc-price" placeholder="Price (₹)" required></div>
-            <div class="col-md-3"><input type="text" class="form-control" id="new-acc-icon" value="bi-gear"></div>
-            <div class="col-md-2"><button type="submit" class="btn btn-primary w-100 font-racing">Add Item</button></div>
-          </form>
         </div>
-      </div>
 
-      <!-- TAB 8: Insurance -->
-      <div class="tab-pane fade" id="tab-insurance">
-        <div class="admin-card p-4">
-          <div class="row mb-3 align-items-center">
-            <div class="col-md-6"><h4 class="font-racing text-cyan mb-0" style="color:var(--yamaha-cyan);">Model Insurance Customizer</h4></div>
-            <div class="col-md-6"><select class="form-select" id="ins-model-select" onchange="renderInsuranceManager()"></select></div>
+        <!-- TAB 10: ADD NEW MODEL -->
+        <div class="tab-pane fade" id="tab-add">
+          <div class="admin-card p-3 p-md-4">
+            <h4 class="font-racing text-cyan mb-3" style="color:var(--yamaha-cyan);">Add Brand New Motorcycle Model</h4>
+            <form class="row g-2" onsubmit="handleAddNewModel(event)">
+              <div class="col-12 col-md-6"><label class="small text-secondary">Model Name</label><input type="text" class="form-control" id="add-model-name" placeholder="e.g. Yamaha R3" required></div>
+              <div class="col-12 col-md-6"><label class="small text-secondary">Offer</label><input type="text" class="form-control" id="add-model-offer" placeholder="e.g. ₹5,000 Exchange Bonus"></div>
+              <div class="col-4"><label class="small text-secondary">Basic (₹)</label><input type="number" class="form-control" id="add-price-basic" required></div>
+              <div class="col-4"><label class="small text-secondary">Middle (₹)</label><input type="number" class="form-control" id="add-price-mid" required></div>
+              <div class="col-4"><label class="small text-secondary">Top (₹)</label><input type="number" class="form-control" id="add-price-top" required></div>
+              <div class="col-12 col-md-6"><label class="small text-secondary">Color Name</label><input type="text" class="form-control" id="add-new-col-name" value="Racing Blue"></div>
+              <div class="col-12 col-md-6"><label class="small text-secondary">Image URL</label><input type="url" class="form-control" id="add-img-url" required></div>
+              <div class="col-12 mt-3"><button type="submit" class="btn btn-primary font-racing w-100 py-2 fs-6">Add Bike To Showroom</button></div>
+            </form>
           </div>
-          <div class="table-responsive">
-            <table class="table table-dark table-hover align-middle">
-              <thead><tr><th>Package Name</th><th>Premium (₹)</th><th>Action</th></tr></thead>
-              <tbody id="insurance-table-tbody"></tbody>
-            </table>
-          </div>
-          <hr class="border-secondary my-3">
-          <form class="row g-2" onsubmit="handleAddInsurance(event)">
-            <div class="col-md-6"><input type="text" class="form-control" id="new-ins-name" placeholder="Package Name" required></div>
-            <div class="col-md-4"><input type="number" class="form-control" id="new-ins-price" placeholder="Premium (₹)" required></div>
-            <div class="col-md-2"><button type="submit" class="btn btn-primary w-100 font-racing">Add Cover</button></div>
-          </form>
         </div>
-      </div>
 
-      <!-- TAB 9: Add New Model -->
-      <div class="tab-pane fade" id="tab-add">
-        <div class="admin-card p-4">
-          <h4 class="font-racing text-cyan mb-3" style="color:var(--yamaha-cyan);">Add Brand New Motorcycle to Catalog</h4>
-          <form class="row g-3" onsubmit="handleAddNewModel(event)">
-            <div class="col-md-6"><label class="form-label small text-secondary">Model Name</label><input type="text" class="form-control" id="add-model-name" placeholder="e.g. Yamaha R3" required></div>
-            <div class="col-md-6"><label class="form-label small text-secondary">Offer</label><input type="text" class="form-control" id="add-model-offer" placeholder="e.g. Cash Discount ₹5,000"></div>
-            <div class="col-md-4"><label class="form-label small text-secondary">Basic Price (₹)</label><input type="number" class="form-control" id="add-price-basic" required></div>
-            <div class="col-md-4"><label class="form-label small text-secondary">Middle Price (₹)</label><input type="number" class="form-control" id="add-price-mid" required></div>
-            <div class="col-md-4"><label class="form-label small text-secondary">Top Price (₹)</label><input type="number" class="form-control" id="add-price-top" required></div>
-            <div class="col-md-6"><label class="form-label small text-secondary">Color Name</label><input type="text" class="form-control" id="add-new-col-name" value="Racing Blue"></div>
-            <div class="col-md-6"><label class="form-label small text-secondary">Image URL</label><input type="url" class="form-control" id="add-img-url" required></div>
-            <div class="col-12 mt-4"><button type="submit" class="btn btn-primary font-racing px-4 py-2 fs-5">Add Model</button></div>
-          </form>
+        <!-- TAB 11: APPS SCRIPT API -->
+        <div class="tab-pane fade" id="tab-settings">
+          <div class="admin-card p-3 p-md-4">
+            <h4 class="font-racing text-cyan mb-2" style="color:var(--yamaha-cyan);">Google Apps Script Deployment URL</h4>
+            <p class="small text-secondary mb-3">Paste your Web App deployment URL to link this dashboard directly to Google Sheets:</p>
+            <div class="input-group mb-2">
+              <input type="url" class="form-control" id="admin-apps-script-url" placeholder="https://script.google.com/macros/s/AKfycbx6AXfxXV2lFBEiD6O88TvUpTEYwjbWAObXQzijUFKGKc9LpKXCoht0svqP5x0hek2W/exec">
+              <button class="btn btn-primary font-racing" onclick="saveAppsScriptEndpoint()">Save URL</button>
+            </div>
+          </div>
         </div>
-      </div>
 
-      <!-- TAB 10: Apps Script API -->
-      <div class="tab-pane fade" id="tab-settings">
-        <div class="admin-card p-4">
-          <h4 class="font-racing text-cyan mb-3" style="color:var(--yamaha-cyan);">Google Apps Script Deployment URL</h4>
-          <div class="input-group mb-3">
-            <input type="url" class="form-control" id="admin-apps-script-url" placeholder="https://script.google.com/macros/s/.../exec">
-            <button class="btn btn-primary font-racing" onclick="saveAppsScriptEndpoint()">Save URL</button>
-          </div>
-        </div>
       </div>
-    </div>
-  </div>
-
-  <!-- Detail Modal for Customer Inquiry Message & Accessories -->
-  <div class="modal fade" id="leadDetailModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content" style="background:var(--yamaha-surface); border:1px solid var(--border-glow); color:#fff; border-radius:14px;">
-        <div class="modal-header border-secondary">
-          <h5 class="modal-title font-racing" id="lead-modal-title">Lead Details</h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-        </div>
-        <div class="modal-body">
-          <div class="mb-3">
-            <label class="small text-secondary font-racing">Customer Message / Notes:</label>
-            <div class="p-3 bg-dark rounded border border-secondary text-light" id="lead-modal-message"></div>
-          </div>
-          <div class="mb-3">
-            <label class="small text-secondary font-racing">Selected Accessories (Extrafiting):</label>
-            <div class="p-2 bg-dark rounded border border-secondary text-info small" id="lead-modal-accessories"></div>
-          </div>
-          <div>
-            <label class="small text-secondary font-racing">Selected Insurance Package:</label>
-            <div class="p-2 bg-dark rounded border border-secondary text-info small" id="lead-modal-insurance"></div>
-          </div>
-        </div>
-      </div>
-    </div>
+    </main>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -566,7 +500,6 @@
     let database = [];
     let customerLeads = [];
     let APPS_SCRIPT_URL = localStorage.getItem("yamaha_apps_script_url") || "";
-    let tempUploadedVideoBase64 = null; // Holds in-memory video file data if uploaded
 
     function handleAdminLogin(e) {
       e.preventDefault();
@@ -590,6 +523,12 @@
         document.getElementById("admin-apps-script-url").value = APPS_SCRIPT_URL;
       }
 
+      const homeVidUrl = localStorage.getItem("yamaha_showcase_video_url") || "https://www.youtube.com/watch?v=og860ziXQOQ";
+      const homeVidTitle = localStorage.getItem("yamaha_showcase_video_title") || "2026 Yamaha Official Showcase";
+      document.getElementById("home-video-url-input").value = homeVidUrl;
+      document.getElementById("home-video-title-input").value = homeVidTitle;
+      renderHomeVideoPreview(homeVidUrl);
+
       loadLocalCustomerLeads();
       renderCustomerLeadsTable(customerLeads);
 
@@ -598,7 +537,7 @@
       }
 
       populateAllModelSelectors();
-      renderModelVideoSettings();
+      renderModelMediaSettings();
       renderModelsTable();
       renderColorsManager();
       renderModelSpecsEditor();
@@ -612,255 +551,33 @@
     }
 
     // =========================================================================
-    // PER-MODEL SEPARATE VIDEO STUDIO (URL LINK & DIRECT FILE UPLOAD)
+    // 1. HOME PAGE VIDEO MANAGEMENT
     // =========================================================================
-    function renderModelVideoSettings() {
-      const mIdx = Number(document.getElementById("video-model-select").value) || 0;
-      const bike = database[mIdx];
-      if (!bike) return;
+    function handleSaveHomeVideo(e) {
+      e.preventDefault();
+      const url = document.getElementById("home-video-url-input").value.trim();
+      const title = document.getElementById("home-video-title-input").value.trim();
 
-      document.getElementById("video-preview-model-name").innerText = bike.name;
-      document.getElementById("model-video-file-input").value = "";
-      document.getElementById("video-upload-status").classList.add("d-none");
-      tempUploadedVideoBase64 = null;
+      localStorage.setItem("yamaha_showcase_video_url", url);
+      localStorage.setItem("yamaha_showcase_video_title", title);
 
-      const currentVideo = bike.videoUrl || "";
-      document.getElementById("model-video-url-input").value = currentVideo;
-
-      renderVideoPreviewBox(currentVideo, bike.name);
-      document.getElementById("video-status-tag").innerText = currentVideo ? "Video Configured" : "No Video Attached";
-      document.getElementById("video-status-tag").className = currentVideo ? "badge bg-success font-racing" : "badge bg-secondary font-racing";
+      renderHomeVideoPreview(url);
+      alert("Home page video updated successfully! It will now play on home.html.");
     }
 
-    function previewCurrentVideoInput() {
-      const bike = database[Number(document.getElementById("video-model-select").value) || 0];
-      const url = document.getElementById("model-video-url-input").value.trim();
-      renderVideoPreviewBox(url, bike ? bike.name : "Model");
-      document.getElementById("video-status-tag").innerText = "Previewing Input (Unsaved)";
-      document.getElementById("video-status-tag").className = "badge bg-warning text-dark font-racing";
-    }
-
-    function handleDirectVideoFileUpload(e) {
-      const file = e.target.files[0];
-      if (!file) return;
-
-      if (file.size > 25 * 1024 * 1024) {
-        alert("Video file size is larger than 25MB. For large videos, we recommend pasting a YouTube link!");
-      }
-
-      const reader = new FileReader();
-      reader.onload = function(evt) {
-        tempUploadedVideoBase64 = evt.target.result;
-        renderVideoPreviewBox(tempUploadedVideoBase64, "Uploaded File");
-        document.getElementById("video-upload-status").classList.remove("d-none");
-        document.getElementById("model-video-url-input").value = "";
-        document.getElementById("video-status-tag").innerText = "File Ready (Click Save)";
-        document.getElementById("video-status-tag").className = "badge bg-info text-dark font-racing";
-      };
-      reader.readAsDataURL(file);
-    }
-
-    function renderVideoPreviewBox(videoSource, title) {
-      const box = document.getElementById("model-video-preview-box");
-      box.innerHTML = "";
-
-      if (!videoSource) {
-        box.innerHTML = `
-          <div class="d-flex flex-column align-items-center justify-content-center h-100 text-secondary p-4">
-            <i class="bi bi-camera-reels fs-1 mb-2"></i>
-            <span>No video assigned to this model yet. Add a link or upload a file above.</span>
-          </div>
-        `;
-        return;
-      }
-
-      // Check YouTube URLs
-      const ytMatch = videoSource.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
+    function renderHomeVideoPreview(url) {
+      const box = document.getElementById("home-video-preview-box");
+      const ytMatch = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=|shorts\/))([\w-]{11})/);
 
       if (ytMatch && ytMatch[1]) {
-        box.innerHTML = `
-          <iframe 
-            src="https://www.youtube.com/embed/${ytMatch[1]}?autoplay=1&mute=1&loop=1&playlist=${ytMatch[1]}&controls=1&rel=0" 
-            title="${title}" 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-            allowfullscreen>
-          </iframe>
-        `;
+        box.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${ytMatch[1]}?autoplay=1&mute=1&playsinline=1&controls=1" class="w-100 h-100" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`;
       } else {
-        // Direct file Base64 or MP4 link
-        box.innerHTML = `
-          <video autoplay muted loop controls playsinline class="w-100 h-100">
-            <source src="${videoSource}">
-            Your browser does not support HTML5 video preview.
-          </video>
-        `;
-      }
-    }
-
-    function saveSelectedModelVideo() {
-      const mIdx = Number(document.getElementById("video-model-select").value) || 0;
-      const bike = database[mIdx];
-      if (!bike) return;
-
-      const urlInput = document.getElementById("model-video-url-input").value.trim();
-      const finalVideoData = tempUploadedVideoBase64 || urlInput;
-
-      if (!finalVideoData) {
-        alert("Please enter a video URL or select a video file first!");
-        return;
-      }
-
-      bike.videoUrl = finalVideoData;
-      saveLocal();
-
-      document.getElementById("video-status-tag").innerText = "Saved & Ready for User Page";
-      document.getElementById("video-status-tag").className = "badge bg-success font-racing";
-      alert(`Walkaround video saved successfully for ${bike.name}! It will now play automatically when this bike is viewed in user.html.`);
-    }
-
-    function removeSelectedModelVideo() {
-      const mIdx = Number(document.getElementById("video-model-select").value) || 0;
-      const bike = database[mIdx];
-      if (!bike) return;
-
-      if (confirm(`Remove video for ${bike.name}?`)) {
-        bike.videoUrl = "";
-        tempUploadedVideoBase64 = null;
-        document.getElementById("model-video-url-input").value = "";
-        document.getElementById("model-video-file-input").value = "";
-        saveLocal();
-        renderModelVideoSettings();
+        box.innerHTML = `<video autoplay muted loop controls playsinline class="w-100 h-100"><source src="${url}"></video>`;
       }
     }
 
     // =========================================================================
-    // CUSTOMER LEADS & INQUIRIES MANAGEMENT
-    // =========================================================================
-    function loadLocalCustomerLeads() {
-      const storedLeads = localStorage.getItem("yamaha_customer_leads");
-      if (storedLeads) {
-        try { customerLeads = JSON.parse(storedLeads); } catch (e) { customerLeads = []; }
-      }
-    }
-
-    function saveLocalLeads() {
-      localStorage.setItem("yamaha_customer_leads", JSON.stringify(customerLeads));
-    }
-
-    function renderCustomerLeadsTable(leadsToRender) {
-      const tbody = document.getElementById("customer-leads-tbody");
-      tbody.innerHTML = "";
-      document.getElementById("leads-count-badge").innerText = customerLeads.length;
-
-      if (!leadsToRender || leadsToRender.length === 0) {
-        tbody.innerHTML = `
-          <tr>
-            <td colspan="8" class="text-center py-4 text-secondary">
-              <i class="bi bi-inbox fs-3 d-block mb-1"></i>
-              No customer inquiries received yet. When visitors submit the form in user.html, leads appear here automatically!
-            </td>
-          </tr>
-        `;
-        return;
-      }
-
-      leadsToRender.forEach((lead, idx) => {
-        const tr = document.createElement("tr");
-        const formattedDate = lead.timestamp ? new Date(lead.timestamp).toLocaleString('en-IN', { dateStyle: 'short', timeStyle: 'short' }) : 'N/A';
-        const cleanPhone = (lead.mobileNumber || "").replace(/[^0-9]/g, '');
-
-        tr.innerHTML = `
-          <td class="small text-secondary">${formattedDate}</td>
-          <td><strong>${lead.fullName || 'Guest'}</strong></td>
-          <td>
-            <a href="tel:${cleanPhone}" class="text-info text-decoration-none fw-bold">
-              <i class="bi bi-telephone-fill me-1"></i>${lead.mobileNumber || 'N/A'}
-            </a>
-          </td>
-          <td class="small">${lead.email || '<span class="text-secondary">None</span>'}</td>
-          <td><span class="badge bg-primary font-racing">${lead.modelRequested || 'General Inquiry'}</span></td>
-          <td class="small text-warning"><i class="bi bi-calendar-event me-1"></i>${lead.preferredDate || 'N/A'}</td>
-          <td><span class="lead-badge bg-secondary">${lead.inquiryType || 'General'}</span></td>
-          <td>
-            <div class="d-flex gap-1">
-              <a href="https://wa.me/91${cleanPhone}?text=Hello%20${encodeURIComponent(lead.fullName || '')},%20greetings%20from%20Yamaha%20Sai%20Motors%20regarding%20your%20inquiry%20for%20${encodeURIComponent(lead.modelRequested || 'a bike')}." target="_blank" class="btn btn-sm btn-success" title="Chat on WhatsApp">
-                <i class="bi bi-whatsapp"></i>
-              </a>
-              <button class="btn btn-sm btn-info text-dark" onclick="viewLeadDetails(${idx})" title="View Message & Add-ons">
-                <i class="bi bi-chat-left-text"></i>
-              </button>
-              <button class="btn btn-sm btn-danger" onclick="deleteCustomerLead(${idx})" title="Delete lead">
-                <i class="bi bi-trash"></i>
-              </button>
-            </div>
-          </td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-
-    function viewLeadDetails(idx) {
-      const lead = customerLeads[idx];
-      if (!lead) return;
-      document.getElementById("lead-modal-title").innerText = `${lead.fullName} (${lead.mobileNumber})`;
-      document.getElementById("lead-modal-message").innerText = lead.message || "No custom message provided.";
-      document.getElementById("lead-modal-accessories").innerText = lead.accessories || "None";
-      document.getElementById("lead-modal-insurance").innerText = lead.insurance || "None";
-      const modal = new bootstrap.Modal(document.getElementById("leadDetailModal"));
-      modal.show();
-    }
-
-    function deleteCustomerLead(idx) {
-      if (confirm(`Remove inquiry from ${customerLeads[idx].fullName}?`)) {
-        customerLeads.splice(idx, 1);
-        saveLocalLeads();
-        renderCustomerLeadsTable(customerLeads);
-      }
-    }
-
-    function clearLocalLeads() {
-      if (confirm("Are you sure you want to clear local leads on this machine?")) {
-        customerLeads = [];
-        saveLocalLeads();
-        renderCustomerLeadsTable(customerLeads);
-      }
-    }
-
-    function filterCustomerLeads(term) {
-      const q = (term || "").toLowerCase().trim();
-      if (!q) {
-        renderCustomerLeadsTable(customerLeads);
-        return;
-      }
-      const filtered = customerLeads.filter(l => 
-        (l.fullName && l.fullName.toLowerCase().includes(q)) ||
-        (l.mobileNumber && l.mobileNumber.includes(q)) ||
-        (l.modelRequested && l.modelRequested.toLowerCase().includes(q)) ||
-        (l.email && l.email.toLowerCase().includes(q))
-      );
-      renderCustomerLeadsTable(filtered);
-    }
-
-    async function fetchLiveLeadsFromSheet() {
-      if (!APPS_SCRIPT_URL) return;
-      try {
-        const res = await fetch(`${APPS_SCRIPT_URL}?action=get_all`);
-        const json = await res.json();
-        if (json.bookings && Array.isArray(json.bookings)) {
-          customerLeads = json.bookings;
-          saveLocalLeads();
-          renderCustomerLeadsTable(customerLeads);
-        } else {
-          loadLocalCustomerLeads();
-          renderCustomerLeadsTable(customerLeads);
-        }
-      } catch (err) {
-        console.warn("Using local leads cache:", err);
-      }
-    }
-
-    // =========================================================================
-    // MODELS TABLE & CATALOG MANAGEMENT
+    // 2. PER-MODEL 360 & VIDEO STUDIO (UNIFIED INPUT)
     // =========================================================================
     function populateAllModelSelectors() {
       const selects = ["video-model-select", "color-model-select", "specs-model-select", "img-model-select", "acc-model-select", "ins-model-select"];
@@ -874,8 +591,166 @@
       });
     }
 
+    function renderModelMediaSettings() {
+      const mIdx = Number(document.getElementById("video-model-select").value) || 0;
+      const bike = database[mIdx];
+      if (!bike) return;
+
+      document.getElementById("media-preview-model-name").innerText = bike.name;
+      
+      const current360Val = bike.view360Url || bike.view360Base || "https://yamaha-r2.yamaha-motor-india.com/assets/images/360/grey/1.webp";
+      document.getElementById("model-360-unified-input").value = current360Val;
+      document.getElementById("model-video-url-input").value = bike.videoUrl || "";
+
+      previewUnified360();
+    }
+
+    function previewUnified360() {
+      let val = document.getElementById("model-360-unified-input").value.trim();
+      const box = document.getElementById("model-media-preview-box");
+      if (!val) {
+        box.innerHTML = `<div class="p-4 text-center text-secondary">No 360 URL entered yet.</div>`;
+        return;
+      }
+
+      if (val.includes(".html") || val.includes("bikedekho")) {
+        box.innerHTML = `<iframe src="${val}" class="w-100 h-100 border-0" allowfullscreen></iframe>`;
+        document.getElementById("media-status-tag").innerText = "Previewing Web 360";
+        document.getElementById("media-status-tag").className = "badge bg-info text-dark font-racing";
+        return;
+      }
+
+      if (val.endsWith("/")) val += "1.webp";
+      else if (!val.endsWith(".webp") && !val.endsWith(".png") && !val.endsWith(".jpg")) val += "/1.webp";
+
+      box.innerHTML = `
+        <div class="w-100 h-100 d-flex align-items-center justify-content-center bg-dark">
+          <img src="${val}" class="w-75 h-75 object-fit-contain" alt="Frame 1" onerror="this.src='https://placehold.co/400x250/0E1626/00F0FF?text=Invalid+Image+Link'">
+        </div>
+      `;
+      document.getElementById("media-status-tag").innerText = "Previewing Sequence Frame 1";
+      document.getElementById("media-status-tag").className = "badge bg-info text-dark font-racing";
+    }
+
+    function previewCurrentVideoInput() {
+      const url = document.getElementById("model-video-url-input").value.trim();
+      const box = document.getElementById("model-media-preview-box");
+      if (!url) {
+        box.innerHTML = `<div class="p-4 text-center text-secondary">No Video URL entered yet.</div>`;
+        return;
+      }
+      const ytMatch = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=|shorts\/))([\w-]{11})/);
+      if (ytMatch && ytMatch[1]) {
+        box.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${ytMatch[1]}?autoplay=1&mute=1&playsinline=1&controls=1" class="w-100 h-100" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`;
+      } else {
+        box.innerHTML = `<video autoplay muted loop controls playsinline class="w-100 h-100"><source src="${url}"></video>`;
+      }
+      document.getElementById("media-status-tag").innerText = "Previewing Video";
+      document.getElementById("media-status-tag").className = "badge bg-danger font-racing";
+    }
+
+    function saveSelectedModelMedia() {
+      const mIdx = Number(document.getElementById("video-model-select").value) || 0;
+      const bike = database[mIdx];
+      if (!bike) return;
+
+      const unified360 = document.getElementById("model-360-unified-input").value.trim();
+      
+      if (unified360.includes(".html") || unified360.includes("bikedekho")) {
+        bike.view360Url = unified360;
+        bike.view360Base = "";
+      } else {
+        bike.view360Base = unified360;
+        bike.view360Url = "";
+      }
+
+      bike.videoUrl = document.getElementById("model-video-url-input").value.trim();
+      saveLocal();
+
+      document.getElementById("media-status-tag").innerText = "Saved";
+      document.getElementById("media-status-tag").className = "badge bg-success font-racing";
+      alert(`360° URL and Video settings saved successfully for ${bike.name}!`);
+    }
+
+    function loadLocalCustomerLeads() {
+      const stored = localStorage.getItem("yamaha_customer_leads");
+      if (stored) {
+        try { customerLeads = JSON.parse(stored); } catch (e) { customerLeads = []; }
+      }
+    }
+
+    function saveLocalLeads() {
+      localStorage.setItem("yamaha_customer_leads", JSON.stringify(customerLeads));
+    }
+
+    function renderCustomerLeadsTable(leadsToRender) {
+      const tbody = document.getElementById("customer-leads-tbody");
+      tbody.innerHTML = "";
+      document.getElementById("leads-count-badge").innerText = customerLeads.length;
+
+      if (!leadsToRender || leadsToRender.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" class="text-center py-4 text-secondary">No inquiries recorded yet.</td></tr>`;
+        return;
+      }
+
+      leadsToRender.forEach((lead, idx) => {
+        const tr = document.createElement("tr");
+        const formattedDate = lead.timestamp ? new Date(lead.timestamp).toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric' }) : 'N/A';
+        const cleanPhone = (lead.mobileNumber || "").replace(/[^0-9]/g, '');
+
+        tr.innerHTML = `
+          <td class="small text-secondary">${formattedDate}</td>
+          <td><strong>${lead.fullName || 'Guest Customer'}</strong></td>
+          <td><a href="tel:${cleanPhone}" class="text-info fw-bold text-decoration-none">${lead.mobileNumber || 'N/A'}</a></td>
+          <td class="small">${lead.email || 'None'}</td>
+          <td><span class="badge bg-primary font-racing">${lead.modelRequested || 'General'}</span></td>
+          <td class="small text-truncate" style="max-width: 150px;">${lead.message || 'None'}</td>
+          <td>
+            <a href="https://wa.me/91${cleanPhone}?text=Hello%20${encodeURIComponent(lead.fullName || '')},%20greetings%20from%20Yamaha%20Sai%20Motors%20regarding%20your%20inquiry%20for%20${encodeURIComponent(lead.modelRequested || 'a bike')}." target="_blank" class="btn btn-sm btn-success" title="Chat on WhatsApp">
+              <i class="bi bi-whatsapp"></i>
+            </a>
+            <button class="btn btn-sm btn-danger ms-1" onclick="deleteCustomerLead(${idx})"><i class="bi bi-trash"></i></button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function deleteCustomerLead(idx) {
+      if (confirm(`Remove inquiry for ${customerLeads[idx].fullName}?`)) {
+        customerLeads.splice(idx, 1);
+        saveLocalLeads();
+        renderCustomerLeadsTable(customerLeads);
+      }
+    }
+
+    function filterCustomerLeads(term) {
+      const q = (term || "").toLowerCase().trim();
+      if (!q) { renderCustomerLeadsTable(customerLeads); return; }
+      const filtered = customerLeads.filter(l => 
+        (l.fullName && l.fullName.toLowerCase().includes(q)) ||
+        (l.mobileNumber && l.mobileNumber.includes(q)) ||
+        (l.modelRequested && l.modelRequested.toLowerCase().includes(q))
+      );
+      renderCustomerLeadsTable(filtered);
+    }
+
+    async function fetchLiveLeadsFromSheet() {
+      if (!APPS_SCRIPT_URL) return;
+      try {
+        const res = await fetch(`${APPS_SCRIPT_URL}?action=get_all`);
+        const json = await res.json();
+        if (json.bookings && Array.isArray(json.bookings)) {
+          customerLeads = json.bookings;
+          saveLocalLeads();
+          renderCustomerLeadsTable(customerLeads);
+        }
+      } catch (err) { console.warn("Error fetching leads:", err); }
+    }
+
     function renderModelsTable() {
       const tbody = document.getElementById("models-table-tbody");
+      if (!tbody) return;
       tbody.innerHTML = "";
       database.forEach((b, i) => {
         const compliance = (b.specs && b.specs.emissionStandard) ? b.specs.emissionStandard : "BS6 Phase 2B Compliant";
@@ -893,15 +768,12 @@
       });
     }
 
-    function updateModelName(i, val) { database[i].name = val.trim(); saveLocal(); populateAllModelSelectors(); renderModelVideoSettings(); }
+    function updateModelName(i, val) { database[i].name = val.trim(); saveLocal(); populateAllModelSelectors(); renderModelMediaSettings(); }
     function updateModelCompliance(i, val) { if (!database[i].specs) database[i].specs = {}; database[i].specs.emissionStandard = val.trim(); saveLocal(); }
     function updateModelPrice(i, trim, val) { database[i].prices[trim] = Number(val); saveLocal(); }
     function updateModelOffer(i, val) { database[i].offer = val; saveLocal(); }
     function deleteModel(i) { if (confirm(`Delete ${database[i].name}?`)) { database.splice(i, 1); saveLocal(); initAdminData(); } }
 
-    // =========================================================================
-    // COLORWAYS & LIVERIES
-    // =========================================================================
     function renderColorsManager() {
       const modelIdx = Number(document.getElementById("color-model-select").value) || 0;
       const bike = database[modelIdx];
@@ -910,7 +782,7 @@
       if (!bike || !bike.colors) return;
       bike.colors.forEach((col, ci) => {
         container.innerHTML += `
-          <div class="col-md-6">
+          <div class="col-12 col-md-6">
             <div class="color-edit-card d-flex align-items-center justify-content-between gap-2">
               <div class="d-flex align-items-center gap-2 flex-grow-1">
                 <input type="color" class="form-control form-control-color form-control-sm" value="${col.hex || '#0050FF'}" onchange="database[${modelIdx}].colors[${ci}].hex = this.value; saveLocal();">
@@ -931,9 +803,6 @@
       saveLocal(); renderColorsManager(); document.getElementById("add-color-name").value = "";
     }
 
-    // =========================================================================
-    // 18 SPECIFICATIONS EDITOR
-    // =========================================================================
     function renderModelSpecsEditor() {
       const modelIdx = Number(document.getElementById("specs-model-select").value) || 0;
       const s = (database[modelIdx] && database[modelIdx].specs) ? database[modelIdx].specs : {};
@@ -980,12 +849,9 @@
         battery: document.getElementById("spec-edit-battery").value.trim(),
         fuelType: document.getElementById("spec-edit-fuelType").value.trim()
       };
-      saveLocal(); renderModelsTable(); alert("Specifications saved successfully!");
+      saveLocal(); renderModelsTable(); alert("Technical specifications saved successfully!");
     }
 
-    // =========================================================================
-    // MULTI-IMAGE STUDIO
-    // =========================================================================
     function renderModelImageManager() {
       const mIdx = Number(document.getElementById("img-model-select").value) || 0;
       const b = database[mIdx];
@@ -1021,9 +887,6 @@
       saveLocal(); renderModelImages(); document.getElementById("new-image-url-input").value = "";
     }
 
-    // =========================================================================
-    // ACCESSORIES / EXTRAFITING
-    // =========================================================================
     function renderAccessoriesManager() {
       const mIdx = Number(document.getElementById("acc-model-select").value) || 0;
       const tbody = document.getElementById("accessories-table-tbody");
@@ -1049,9 +912,6 @@
       saveLocal(); renderAccessoriesManager(); e.target.reset();
     }
 
-    // =========================================================================
-    // INSURANCE
-    // =========================================================================
     function renderInsuranceManager() {
       const mIdx = Number(document.getElementById("ins-model-select").value) || 0;
       const tbody = document.getElementById("insurance-table-tbody");
@@ -1076,16 +936,17 @@
       saveLocal(); renderInsuranceManager(); e.target.reset();
     }
 
-    // =========================================================================
-    // ADD NEW MODEL
-    // =========================================================================
     function handleAddNewModel(e) {
       e.preventDefault();
       database.push({
         id: "model-" + Date.now(),
         name: document.getElementById("add-model-name").value.trim(),
+        subtitle: "RACE TO THE NEXT LEVEL",
+        bluetooth: true,
         offer: document.getElementById("add-model-offer").value.trim(),
         videoUrl: "",
+        view360Url: "",
+        view360Base: "https://yamaha-r2.yamaha-motor-india.com/assets/images/360/grey/1.webp",
         prices: { basic: Number(document.getElementById("add-price-basic").value), middle: Number(document.getElementById("add-price-mid").value), top: Number(document.getElementById("add-price-top").value) },
         specs: { emissionStandard: "BS6 Phase 2B Compliant", displacement: "155 cc", maxPower: "18.1 bhp", maxTorque: "14.2 Nm", mileage: "46 kmpl" },
         colors: [{ name: document.getElementById("add-new-col-name").value, hex: "#0050FF", images: [document.getElementById("add-img-url").value] }],
@@ -1094,9 +955,6 @@
       saveLocal(); alert("Model added successfully!"); location.reload();
     }
 
-    // =========================================================================
-    // APPS SCRIPT API & SYNC
-    // =========================================================================
     function saveAppsScriptEndpoint() {
       const u = document.getElementById("admin-apps-script-url").value.trim();
       localStorage.setItem("yamaha_apps_script_url", u);
@@ -1104,14 +962,21 @@
     }
 
     async function saveAndSyncAllToGoogleSheet() {
-      if (!APPS_SCRIPT_URL) { alert("Please configure Apps Script URL in the API tab first."); return; }
+      if (!APPS_SCRIPT_URL) { alert("Please configure Apps Script URL in Tab 11 first."); return; }
       try {
+        const homeVidUrl = localStorage.getItem("yamaha_showcase_video_url") || "";
+        const homeVidTitle = localStorage.getItem("yamaha_showcase_video_title") || "";
+
         await fetch(APPS_SCRIPT_URL, {
           method: "POST", mode: "no-cors",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ action: "sync_full_database", database: database })
+          body: JSON.stringify({ 
+            action: "sync_full_database", 
+            database: database,
+            video: { url: homeVidUrl, title: homeVidTitle }
+          })
         });
-        alert("Success! Full showroom catalog, individual videos, and configurations synced to Google Sheets.");
+        alert("Success! Catalog, 360 links, sequence URLs, videos, and settings synced to Google Sheets.");
       } catch (err) { alert("Sync error: " + err); }
     }
   </script>
